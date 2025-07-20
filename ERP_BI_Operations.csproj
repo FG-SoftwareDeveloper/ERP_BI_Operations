@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-ERP_BI_Operations-29fe87b3-3d4f-4277-8d4f-008b9c4329b3</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.16" />
+	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Pages\Dashboards\" />
+    <Folder Include="Pages\Accounts\" />
+    <Folder Include="Pages\ARInvoices\" />
+    <Folder Include="Pages\APInvoices\" />
+    <Folder Include="Pages\Customers\" />
+    <Folder Include="Pages\Departments\" />
+    <Folder Include="Pages\Documents\" />
+    <Folder Include="Pages\Employees\" />
+    <Folder Include="Pages\Equipment\" />
+    <Folder Include="Pages\FinancialSnapshots\" />
+    <Folder Include="Pages\JournalEntries\" />
+    <Folder Include="Pages\KPIs\" />
+    <Folder Include="Pages\MaintenanceRecords\" />
+    <Folder Include="Pages\Materials\" />
+    <Folder Include="Pages\MaterialUsage\" />
+    <Folder Include="Pages\Roles\" />
+    <Folder Include="Pages\Transmittals\" />
+    <Folder Include="Pages\Users\" />
+    <Folder Include="Pages\Settings\" />
+    <Folder Include="Pages\ServiceOrders\" />
+    <Folder Include="Pages\ServiceAgreements\" />
+    <Folder Include="Pages\RFIs\" />
+    <Folder Include="Pages\Receipts\" />
+    <Folder Include="Pages\PurchaseOrderLines\" />
+    <Folder Include="Pages\PurchaseOrders\" />
+    <Folder Include="Pages\Projects\" />
+    <Folder Include="Pages\ProjectFinancialSummary\" />
+    <Folder Include="Pages\PayrollRuns\" />
+    <Folder Include="Pages\Payments\" />
+    <Folder Include="Pages\TimeEntries\" />
+  </ItemGroup>
+
+</Project>

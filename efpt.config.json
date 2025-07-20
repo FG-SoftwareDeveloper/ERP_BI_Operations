@@ -1,0 +1,182 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "ERP_BIContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "MinimumProductVersion": "2.6.0",
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "ERP_BI_Operations",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Accounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[APInvoices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ARInvoices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankAccounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Company]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Customers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Departments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Documents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmployeePayDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Employees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Equipment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EquipmentUsage]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FinancialSnapshots]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ForecastedFinancials]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[JournalEntries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[JournalEntryLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KPIs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MaintenanceRecords]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Materials]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MaterialUsage]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Payments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PayrollRuns]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProjectFinancialSummary]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Projects]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PurchaseOrderLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PurchaseOrders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Receipts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RFIs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ServiceAgreements]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ServiceOrders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TimeEntries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Transmittals]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Users]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vendors]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}
