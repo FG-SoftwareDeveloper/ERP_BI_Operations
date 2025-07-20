@@ -1,48 +1,213 @@
 ﻿@page
-@model MyApp.Namespace.IndexModel
+@model MyApp.Namespace.IndexModel 
 @{
     ViewData["Title"] = "Accounts";
 }
 
-<h2>Accounts</h2>
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Accounts Overview</h2>
 
-<!-- Toggle Button -->
-<button id="toggleViewBtn" class="btn btn-primary mb-3">Switch to Card View</button>
+    <div class="mb-6 flex flex-wrap gap-4 items-center">
+        <button id="toggleViewBtn_accountsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Switch to Card View
+        </button>
+        <button id="toggleChartBtn_accountsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
+            Show Chart
+        </button>
+    </div>
 
-<!-- Accounts Table -->
-<table id="accountsTable" class="table table-striped table-bordered w-100">
-    <thead>
-        <tr>
-            <th>Account ID</th>
-            <th>Account Name</th>
-            <th>Account Type</th>
-            <th>Balance</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+    <!-- Accounts Table Container -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-lg p-4">
+        <table id="accountsTable" class="min-w-full leading-normal">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-xl">Account ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Account Name</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Account Type</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Balance</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-xl">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* DataTables will populate this tbody *@
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"/>
-    <script src="~/js/site.js"></script> @* Ensure this path is correct for your LoadDataTable function *@
+    @*
+        Removed redundant CDN links for jQuery, DataTables, and Chart.js
+        as they are already included in Views/Shared/_Layout.cshtml.
+        Only include your custom site.js here.
+    *@
+    <script src="~/js/site.js" asp-append-version="true"></script> @* Ensure this path is correct for your LoadDataTable function *@
     <script>
         $(document).ready(function () {
+            const accountsTableId = "accountsTable";
+
             LoadDataTable({
-                tableId: "accountsTable",
+                tableId: accountsTableId,
                 ajaxUrl: "/api/Accounts", // Your API endpoint
                 columns: [
-                    { data: "accountId" },   // Matches Account.AccountId property
-                    { data: "accountName" }, // Matches Account.AccountName property
-                    { data: "accountType" }  // Matches Account.AccountType property
-                    // Add more columns here if your table headers include them and the model has corresponding properties
+                    { data: "accountId", title: "Account ID" },
+                    { data: "accountName", title: "Account Name" },
+                    { data: "accountType", title: "Account Type" },
+                    { data: "balance", title: "Balance" },
+                    {
+                        data: null,
+                        title: "Actions",
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            const accountId = row.accountId;
+                            return `
+                                <a href="/Accounts/Edit/${accountId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 mr-2">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                    Edit
+                                </a>
+                                <a href="/Accounts/Delete/${accountId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this account?');">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    Delete
+                                </a>
+                            `;
+                        }
+                    }
                 ],
-                pageLength: 25,
-                // Optional: default order, e.g., by AccountName ascending
-                // defaultOrder: [[1, 'asc']]
+                pageLength: 10,
+                initialIsCardView: false,
+                initialIsChartView: false,
+                chartConfig: {
+                    type: 'line', // Changed to 'line' chart type
+                    processData: function (apiData, columns) {
+                        console.log("Processing data for line chart:", apiData);
+
+                        const labels = apiData.map(item => item.accountName); // X-axis labels: Account Name
+
+                        // Create structured data points to include accountType for tooltips
+                        const dataPoints = apiData.map(item => ({
+                            x: item.accountName,     // X-axis value
+                            y: item.balance,         // Y-axis value
+                            accountType: item.accountType // Custom property for tooltip
+                        }));
+
+                        return {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Account Balances',
+                                data: dataPoints, // Use the structured data points
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill color under the line
+                                borderWidth: 2,
+                                pointRadius: 6, // Show points on the line
+                                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                                pointBorderColor: '#fff',
+                                pointHoverRadius: 8,
+                                pointHoverBackgroundColor: 'rgba(75, 192, 192, 1)',
+                                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                                tension: 0.4 // Smooth line
+                            }]
+                        };
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Balance ($)',
+                                    font: { size: 14, family: 'Inter, sans-serif' }
+                                },
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.2)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Account Name', // X-axis title
+                                    font: { size: 14, family: 'Inter, sans-serif' }
+                                },
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        family: 'Inter, sans-serif'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Account Balances Overview',
+                                font: { size: 20, family: 'Inter, sans-serif', weight: 'bold' },
+                                color: '#333'
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { family: 'Inter, sans-serif' }
+                                }
+                            },
+                            tooltip: { // Custom tooltip configuration
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    },
+                                    afterLabel: function(context) {
+                                        // Access the custom 'accountType' property from the raw data point
+                                        const accountType = context.raw.accountType;
+                                        return accountType ? `Type: ${accountType}` : '';
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        font: { // Global font setting for Chart.js
+                            family: 'Inter, sans-serif'
+                        }
+                    }
+                }
+            });
+
+            // Event listener for the table/card toggle button
+            $(`#toggleViewBtn_${accountsTableId}`).on('click', function () {
+                toggleTableView(accountsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[accountsTableId];
+                if (instanceState.isCardView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>Switch to Table View');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Switch to Card View');
+                }
+            });
+
+            // Event listener for the chart toggle button
+            $(`#toggleChartBtn_${accountsTableId}`).on('click', function () {
+                toggleChartView(accountsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[accountsTableId];
+                 if (instanceState.isChartView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-6 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>Show Table/Card');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>Show Chart');
+                }
             });
         });
     </script>
-    }
+}

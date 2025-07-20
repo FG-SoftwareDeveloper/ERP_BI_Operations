@@ -1,4 +1,50 @@
-﻿@page
+﻿@page "{id:int?}" 
 @model MyApp.Namespace.EditModel
 @{
+    ViewData["Title"] = "Edit Account"; // Set a title for the page
+}
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Edit Account</h2>
+
+    @* Add your form for editing an account here.
+       You will need to fetch the account details in the EditModel's OnGet method. *@
+    <form method="post">
+        <div class="mb-4">
+            <label for="AccountId" class="block text-gray-700 text-sm font-bold mb-2">Account ID:</label>
+            <input type="text" id="AccountId" name="AccountId" value="@Model.Account?.AccountId" readonly
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+
+        <div class="mb-4">
+            <label for="AccountName" class="block text-gray-700 text-sm font-bold mb-2">Account Name:</label>
+            <input type="text" id="AccountName" name="AccountName" value="@Model.Account?.AccountName"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+
+        <div class="mb-4">
+            <label for="AccountType" class="block text-gray-700 text-sm font-bold mb-2">Account Type:</label>
+            <input type="text" id="AccountType" name="AccountType" value="@Model.Account?.AccountType"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+
+        <div class="mb-6">
+            <label for="Balance" class="block text-gray-700 text-sm font-bold mb-2">Balance:</label>
+            <input type="number" step="0.01" id="Balance" name="Balance" value="@Model.Account?.Balance"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                Save Changes
+            </button>
+            <a href="/Accounts/ListAccounts" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

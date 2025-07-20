@@ -1,41 +1,135 @@
+/* Base styles, potentially overridden by Tailwind */
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    font-size: 16px; /* Base font size */
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px; /* Space for footer */
+    font-family: 'Inter', sans-serif; /* Ensure Inter font is applied */
 }
 
-.cards tbody {
+/* --- Custom styles for DataTable in Card View --- */
+/* The container for the cards, which will be a responsive grid */
+.dataTables_wrapper .cards-grid {
+    display: grid; /* Use CSS Grid for flexible layout */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns: min 300px, max 1fr */
+    gap: 1.5rem; /* Space between cards */
+    padding: 1rem; /* Padding around the grid */
+    border: 1px solid #cbd5e0; /* Optional: Add a border to see the grid container */
+    border-radius: 0.75rem; /* Match other rounded elements */
+}
+
+/* Style for each individual data card */
+.dataTables_wrapper .data-card {
+    border: 1px solid #e2e8f0; /* Tailwind border-gray-200 */
+    border-radius: 0.75rem; /* Rounded corners for cards */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+    .dataTables_wrapper .data-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1); /* Larger shadow on hover */
+    }
+
+    .dataTables_wrapper .data-card .card-item {
+        padding: 0.5rem 1rem; /* Padding inside each item within a card */
+        border-bottom: 1px dashed #edf2f7; /* Tailwind border-gray-100 */
+        display: flex; /* Use flex for key-value pairs */
+        justify-content: space-between; /* Space out key and value */
+        align-items: center;
+    }
+
+        .dataTables_wrapper .data-card .card-item:last-child {
+            border-bottom: none; /* No border on the last item */
+        }
+
+    .dataTables_wrapper .data-card .card-actions {
+        display: flex;
+        justify-content: flex-end; /* Align action buttons to the right */
+        gap: 0.5rem; /* Space between buttons */
+        padding: 1rem; /* Padding for the actions area */
+        border-top: 1px solid #e2e8f0; /* Separator for actions */
+        margin-top: 1rem;
+    }
+
+/* --- Styles for DataTables default controls (pagination, search, info) --- */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    padding: 1rem 0; /* Add some padding */
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
     gap: 1rem;
 }
 
-    .cards tbody tr {
-        display: block;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 1rem;
-        width: 300px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    /* Style for DataTables pagination buttons */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        background-color: #e2e8f0; /* Tailwind gray-200 */
+        color: #4a5568; /* Tailwind gray-700 */
+        font-weight: 600;
+        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        cursor: pointer;
     }
 
-.cards thead {
-    display: none;
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #3b82f6; /* Tailwind blue-500 */
+            color: white;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    /* Style for DataTables search input */
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #cbd5e0; /* Tailwind gray-300 */
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        outline: none;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #3b82f6; /* Tailwind blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Tailwind blue-300 with opacity */
+        }
+
+    /* Style for DataTables length select */
+    .dataTables_wrapper .dataTables_length select {
+        border: 1px solid #cbd5e0;
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        outline: none;
+        background-color: white;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .dataTables_wrapper .dataTables_length select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+/* Chart container styling */
+.chart-container {
+    position: relative;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 400px; /* Base height for charts */
+    max-height: 500px; /* Max height to prevent excessive height */
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 450px; /* Adjust height for larger screens */
+    }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Build.ObjectModelRemoting;
 using Microsoft.EntityFrameworkCore;
 
 namespace ERP_BI_Operations.Models;
@@ -13,6 +14,8 @@ public partial class Account
     [Key]
     [Column("AccountID")]
     public int AccountId { get; set; }
+
+    public decimal Balance { get; set; }
 
     [Required]
     [StringLength(255)]
