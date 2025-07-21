@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -21,7 +21,6 @@
     <Folder Include="Models\" />
     <Folder Include="Controllers\" />
     <Folder Include="Pages\Dashboards\" />
-    <Folder Include="Pages\Accounts\" />
     <Folder Include="Pages\ARInvoices\" />
     <Folder Include="Pages\APInvoices\" />
     <Folder Include="Pages\Customers\" />

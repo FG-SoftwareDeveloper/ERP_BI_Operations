@@ -1,4 +1,57 @@
-﻿@page
+﻿@page "{id:int?}"
 @model MyApp.Namespace.EditModel
 @{
+    ViewData["Title"] = "Edit Account";
+}
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Edit Account</h2>
+
+    <form method="post">
+        <div asp-validation-summary="All" class="text-red-500 mb-4"></div>
+
+        <input type="hidden" asp-for="Account.AccountId" />
+
+        <div class="mb-4">
+            <label asp-for="Account.AccountName" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Account.AccountName" class="form-input w-full" />
+            <span asp-validation-for="Account.AccountName" class="text-red-500 text-sm"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Account.AccountType" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Account.AccountType" class="form-input w-full" />
+            <span asp-validation-for="Account.AccountType" class="text-red-500 text-sm"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Account.Balance" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Account.Balance" step="0.01" class="form-input w-full" />
+            <span asp-validation-for="Account.Balance" class="text-red-500 text-sm"></span>
+        </div>
+
+        <div class="mb-6">
+            <label asp-for="Account.CompanyId" class="block text-gray-700 text-sm font-bold mb-2">Company</label>
+            <select asp-for="Account.CompanyId" class="form-select w-full" asp-items="Model.CompanyList">
+                <option value="">-- Select a Company --</option>
+            </select>
+            <span asp-validation-for="Account.CompanyId" class="text-red-500 text-sm"></span>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                Save Changes
+            </button>
+            <a href="/Accounts/ListAccounts" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

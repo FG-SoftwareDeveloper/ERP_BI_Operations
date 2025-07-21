@@ -1,34 +1,32 @@
 ﻿@page
-@model MyApp.Namespace.ListAPInvoiceModel
+@model MyApp.Namespace.IndexModel 
 @{
-    ViewData["Title"] = "AP Invoices";
+    ViewData["Title"] = "Accounts";
 }
 
 <div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
-    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">AP Invoices Overview</h2>
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Accounts Overview</h2>
 
     <div class="mb-6 flex flex-wrap gap-4 items-center">
-        <button id="toggleViewBtn_apInvoicesTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+        <button id="toggleViewBtn_accountsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
             Switch to Card View
         </button>
-        <button id="toggleChartBtn_apInvoicesTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+        <button id="toggleChartBtn_accountsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
             Show Chart
         </button>
     </div>
 
-    <!-- AP Invoices Table Container -->
+    <!-- Accounts Table Container -->
     <div class="overflow-x-auto bg-white rounded-xl shadow-lg p-4">
-        <table id="apInvoicesTable" class="min-w-full leading-normal">
+        <table id="accountsTable" class="min-w-full leading-normal">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-xl">AP Invoice ID</th>
-                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vendor Name</th>
-                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Invoice Date</th>
-                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Due Date</th>
-                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
-                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-xl">Account ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Account Name</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Account Type</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Balance</th>
                     <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-xl">Actions</th>
                 </tr>
             </thead>
@@ -41,64 +39,36 @@
 
 @section Scripts {
     @*
-        Ensure site.js is loaded from _Layout.cshtml.
-        Only include your custom script for this page here.
+        Removed redundant CDN links for jQuery, DataTables, and Chart.js
+        as they are already included in Views/Shared/_Layout.cshtml.
+        Only include your custom site.js here.
     *@
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script> @* Ensure this path is correct for your LoadDataTable function *@
     <script>
         $(document).ready(function () {
-            const apInvoicesTableId = "apInvoicesTable"; // Changed table ID to be specific for AP Invoices
+            const accountsTableId = "accountsTable";
 
             LoadDataTable({
-                tableId: apInvoicesTableId,
-                ajaxUrl: "/api/Apinvoices", // Your API endpoint for AP Invoices
+                tableId: accountsTableId,
+                ajaxUrl: "/api/Accounts", // Your API endpoint
                 columns: [
-                    { data: "apinvoiceId", title: "AP Invoice ID" }, // Assuming property name is apinvoiceId
-                    { data: "vendorName", title: "Vendor Name" }, // Assuming Apinvoice has VendorName
-                    {
-                        data: "invoiceDate",
-                        title: "Invoice Date",
-                        render: function (data) {
-                            // Format date for display if needed
-                            if (data) {
-                                return new Date(data).toLocaleDateString(); // Example: MM/DD/YYYY
-                            }
-                            return '';
-                        }
-                    },
-                    {
-                        data: "dueDate",
-                        title: "Due Date",
-                        render: function (data) {
-                            // Format date for display if needed
-                            if (data) {
-                                return new Date(data).toLocaleDateString(); // Example: MM/DD/YYYY
-                            }
-                            return '';
-                        }
-                    },
-                    {
-                        data: "amount",
-                        title: "Amount",
-                        render: function (data) {
-                            // Format amount as currency
-                            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data);
-                        }
-                    },
-                    { data: "status", title: "Status" },
+                    { data: "accountId", title: "Account ID" },
+                    { data: "accountName", title: "Account Name" },
+                    { data: "accountType", title: "Account Type" },
+                    { data: "balance", title: "Balance" },
                     {
                         data: null,
                         title: "Actions",
                         orderable: false,
                         searchable: false,
                         render: function (data, type, row) {
-                            const apinvoiceId = row.apinvoiceId; // Assuming property name is apinvoiceId
+                            const accountId = row.accountId;
                             return `
-                                <a href="/APInvoices/Edit/${apinvoiceId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 mr-2">
+                                <a href="/Accounts/Edit/${accountId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 mr-2">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     Edit
                                 </a>
-                                <a href="/APInvoices/Delete/${apinvoiceId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this AP Invoice?');">
+                                <a href="/Accounts/Delete/${accountId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this account?');">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     Delete
                                 </a>
@@ -110,35 +80,32 @@
                 initialIsCardView: false,
                 initialIsChartView: false,
                 chartConfig: {
-                    type: 'line', // Line chart for trends over time
+                    type: 'line', // Changed to 'line' chart type
                     processData: function (apiData, columns) {
-                        console.log("Processing data for AP Invoice line chart:", apiData);
+                        console.log("Processing data for line chart:", apiData);
 
-                        // Sort data by InvoiceDate to ensure the line chart is chronological
-                        apiData.sort((a, b) => new Date(a.invoiceDate) - new Date(b.invoiceDate));
+                        const labels = apiData.map(item => item.accountName); // X-axis labels: Account Name
 
-                        const labels = apiData.map(item => new Date(item.invoiceDate).toLocaleDateString()); // X-axis labels: Formatted Invoice Date
-
-                        // Create structured data points to include status for tooltips
+                        // Create structured data points to include accountType for tooltips
                         const dataPoints = apiData.map(item => ({
-                            x: new Date(item.invoiceDate).toLocaleDateString(), // X-axis value
-                            y: item.amount,                                   // Y-axis value
-                            status: item.status                               // Custom property for tooltip
+                            x: item.accountName,     // X-axis value
+                            y: item.balance,         // Y-axis value
+                            accountType: item.accountType // Custom property for tooltip
                         }));
 
                         return {
                             labels: labels,
                             datasets: [{
-                                label: 'Invoice Amount',
-                                data: dataPoints,
-                                borderColor: 'rgba(255, 99, 132, 1)', // Reddish color for invoices
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                label: 'Account Balances',
+                                data: dataPoints, // Use the structured data points
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill color under the line
                                 borderWidth: 2,
-                                pointRadius: 6,
-                                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                                pointRadius: 6, // Show points on the line
+                                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
                                 pointBorderColor: '#fff',
                                 pointHoverRadius: 8,
-                                pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
+                                pointHoverBackgroundColor: 'rgba(75, 192, 192, 1)',
                                 pointHoverBorderColor: 'rgba(220,220,220,1)',
                                 tension: 0.4 // Smooth line
                             }]
@@ -150,7 +117,7 @@
                                 beginAtZero: true,
                                 title: {
                                     display: true,
-                                    text: 'Amount ($)',
+                                    text: 'Balance ($)',
                                     font: { size: 14, family: 'Inter, sans-serif' }
                                 },
                                 grid: {
@@ -160,7 +127,7 @@
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Invoice Date',
+                                    text: 'Account Name', // X-axis title
                                     font: { size: 14, family: 'Inter, sans-serif' }
                                 },
                                 grid: {
@@ -176,7 +143,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'AP Invoice Amounts Over Time',
+                                text: 'Account Balances Overview',
                                 font: { size: 20, family: 'Inter, sans-serif', weight: 'bold' },
                                 color: '#333'
                             },
@@ -187,7 +154,7 @@
                                     font: { family: 'Inter, sans-serif' }
                                 }
                             },
-                            tooltip: {
+                            tooltip: { // Custom tooltip configuration
                                 callbacks: {
                                     label: function(context) {
                                         let label = context.dataset.label || '';
@@ -200,8 +167,9 @@
                                         return label;
                                     },
                                     afterLabel: function(context) {
-                                        const status = context.raw ? context.raw.status : null;
-                                        return status ? `Status: ${status}` : '';
+                                        // Access the custom 'accountType' property from the raw data point
+                                        const accountType = context.raw.accountType;
+                                        return accountType ? `Type: ${accountType}` : '';
                                     }
                                 }
                             }
@@ -210,7 +178,7 @@
                             duration: 1000,
                             easing: 'easeOutQuart'
                         },
-                        font: {
+                        font: { // Global font setting for Chart.js
                             family: 'Inter, sans-serif'
                         }
                     }
@@ -218,10 +186,10 @@
             });
 
             // Event listener for the table/card toggle button
-            $(`#toggleViewBtn_${apInvoicesTableId}`).on('click', function () {
-                toggleTableView(apInvoicesTableId);
+            $(`#toggleViewBtn_${accountsTableId}`).on('click', function () {
+                toggleTableView(accountsTableId);
                 const $btn = $(this);
-                const instanceState = dataTableManager[apInvoicesTableId];
+                const instanceState = dataTableManager[accountsTableId];
                 if (instanceState.isCardView) {
                     $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>Switch to Table View');
                 } else {
@@ -230,10 +198,10 @@
             });
 
             // Event listener for the chart toggle button
-            $(`#toggleChartBtn_${apInvoicesTableId}`).on('click', function () {
-                toggleChartView(apInvoicesTableId);
+            $(`#toggleChartBtn_${accountsTableId}`).on('click', function () {
+                toggleChartView(accountsTableId);
                 const $btn = $(this);
-                const instanceState = dataTableManager[apInvoicesTableId];
+                const instanceState = dataTableManager[accountsTableId];
                  if (instanceState.isChartView) {
                     $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-6 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>Show Table/Card');
                 } else {
