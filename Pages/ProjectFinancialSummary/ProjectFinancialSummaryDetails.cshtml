@@ -1,0 +1,36 @@
+﻿@page "{projectId:int}"
+@model MyApp.Namespace.ProjectFinancialSummaryDetailsModel
+@{
+}
+
+<h2>Material Cost Forecast</h2>
+@if (Model.MaterialCostForecast?.Success == true)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Forecast</th>
+                <th>Lower Bound</th>
+                <th>Upper Bound</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.MaterialCostForecast.Forecasts)
+        {
+            <tr>
+                <td>@item.ForecastDate.ToShortDateString()</td>
+                <td>@item.ForecastedValue:F2</td>
+                <td>@item.LowerBound:F2</td>
+                <td>@item.UpperBound:F2</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        @Model.MaterialCostForecast?.Message ?? "No forecast available."
+    </div>
+}

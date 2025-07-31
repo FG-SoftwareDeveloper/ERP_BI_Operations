@@ -20,6 +20,7 @@ const dataTableManager = {};
  * @param {string} config.chartConfig.type - Chart type (e.g., 'bar', 'line').
  * @param {Function} config.chartConfig.processData - Function to transform AJAX data for the chart.
  * @param {object} [config.chartConfig.options] - Chart.js options.
+ * @param {object} [config.rowGroup] - Configuration for DataTables RowGroup extension.
  */
 function LoadDataTable(config) {
     if (!config || !config.tableId || !config.columns || !config.ajaxUrl) {
@@ -80,6 +81,8 @@ function LoadDataTable(config) {
         responsive: true,
         pageLength: config.pageLength || 10,
         order: config.defaultOrder || [],
+        // --- RowGroup extension support ---
+        rowGroup: config.rowGroup || undefined,
         // drawCallback is primarily for internal DataTable rendering adjustments.
         // Custom view rendering (cards, chart) is now handled externally by toggle functions.
         drawCallback: function (settings) {
@@ -150,7 +153,7 @@ function renderCards(tableId) {
 
     // Ensure the cards container exists and is correctly placed
     if ($cardsContainer.length === 0) {
-        $cardsContainer = $(`<div id="${tableId}-cards-container" class="cards-grid mt-4"></div>`);
+        $cardsContainer = $(`<div id="${tableId}-cards-container" class="row mt-4"></div>`);
         $tableWrapper.after($cardsContainer);
         console.log(`Created cards container #${tableId}-cards-container.`);
     }
@@ -170,7 +173,7 @@ function renderCards(tableId) {
 
     let cardsHtml = '';
     data.forEach(d => {
-        cardsHtml += '<div class="data-card col-3 bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">';
+        cardsHtml += '<div class="data-card col m-2 bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">';
         instance.originalConfig.columns.forEach(col => {
             if (col.title) {
                 let value = d[col.data];
@@ -445,5 +448,16 @@ function destroyChart(tableId) {
         $(`#${tableId}-chart-container`).hide();
         $(`#${tableId}-chart-container`).remove(); // Remove from DOM to clean up
         console.log(`Chart for ${tableId} destroyed and container removed.`);
+    }
+}
+
+/**
+ * Utility function for DataTables column search.
+ * Usage: dt.column(index).search(value).draw();
+ */
+function initializeCurrentPageFeatures() {
+    // If you want to re-initialize filter badges after AJAX loads, call updateActiveFilterBadges here if needed.
+    if (typeof updateActiveFilterBadges === "function") {
+        updateActiveFilterBadges();
     }
 }

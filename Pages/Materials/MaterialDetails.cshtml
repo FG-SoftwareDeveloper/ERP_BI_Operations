@@ -1,0 +1,164 @@
+﻿@page
+@model MyApp.Namespace.MaterialDetailsModel
+@{
+}
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 glass-effect rounded-lg h-full overflow-y-auto">
+    <h2 class="text-4xl themed-heading font-extrabold mb-6 border-b-4 pb-2 inline-block">Operations & Supply Chain Dashboard</h2>
+
+    <!-- Operations & Supply Chain KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">On-Time Delivery Rate</h3>
+            <p class="text-4xl font-bold text-blue-600 mt-auto" id="kpiOnTimeDelivery">0%</p>
+            <span class="text-sm text-gray-500">Percentage of orders delivered on schedule</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Inventory Accuracy</h3>
+            <p class="text-4xl font-bold text-green-600 mt-auto" id="kpiInventoryAccuracy">0%</p>
+            <span class="text-sm text-gray-500">Matching physical count to system records</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Average Order Lead Time</h3>
+            <p class="text-4xl font-bold text-purple-600 mt-auto" id="kpiAvgLeadTime">0 days</p>
+            <span class="text-sm text-gray-500">Time from order to delivery</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Top Supplier Rating</h3>
+            <p class="text-4xl font-bold text-orange-600 mt-auto" id="kpiTopSupplierRating">0/5</p>
+            <span class="text-sm text-gray-500">Average performance of key suppliers</span>
+        </div>
+    </div>
+
+    <!-- Filter and Action Buttons -->
+    <div class="mb-8 p-6 glass-effect rounded-xl border shadow-md">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Filter Supply Chain Activities</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div>
+                <label for="activityTypeFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Activity Type</label>
+                <select id="activityTypeFilter" class="form-select w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="">All Types</option>
+                    <option value="Purchase Order">Purchase Order</option>
+                    <option value="Receipt">Receipt</option>
+                    <option value="Material Usage">Material Usage</option>
+                    <option value="Shipment">Shipment</option>
+                </select>
+            </div>
+            <div>
+                <label for="statusFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                <input type="text" id="statusFilter" placeholder="e.g., Pending, Completed" class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="dateRangeFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date Range</label>
+                <select id="dateRangeFilter" class="form-select w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="">All Time</option>
+                    <option value="last7days">Last 7 Days</option>
+                    <option value="last30days">Last 30 Days</option>
+                    <option value="thisMonth">This Month</option>
+                    <option value="thisYear">This Year</option>
+                </select>
+            </div>
+            <div>
+                <label for="supplierIdFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Supplier ID</label>
+                <input type="number" id="supplierIdFilter" placeholder="Search by Supplier ID" class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center">
+            <a href="/PurchaseOrders/Create" class="flex items-center px-6 py-3 btn-themed font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Create Purchase Order
+            </a>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Record Receipt
+            </button>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                Adjust Inventory
+            </button>
+            <button id="toggleViewBtn_supplyChainActivityTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Switch to Card View
+            </button>
+            <button id="toggleChartBtn_supplyChainActivityTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-7 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>
+                Show Chart
+            </button>
+        </div>
+    </div>
+
+    <!-- Recent Supply Chain Activity Table Container -->
+    <div class="mb-8">
+        <h3 class="text-2xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Recent Supply Chain Activities</h3>
+        <table id="supplyChainActivityTable" class="display w-full text-left border-collapse rounded-lg shadow-md" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-xl">Activity ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Type</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Date</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Item/Material</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Quantity</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Supplier/Customer</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tr-xl">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* DataTables will populate this tbody *@
+            </tbody>
+        </table>
+
+        <div id="supplyChainActivityTable-card-view" class="mt-8 cards-grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;"></div>
+        <div id="supplyChainActivityTable-chart-container" style="display: none;">
+            <canvas id="supplyChainActivityTable-chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Operations & Supply Chain Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">On-Time Delivery Trend</h3>
+            <div style="height: 300px;"> 
+                <canvas id="onTimeDeliveryTrendChart"></canvas>
+            </div>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Inventory Levels by Category</h3>
+            <div style="height: 300px;"> 
+                <canvas id="inventoryLevelsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-card glass-effect rounded-xl p-6 border shadow-md mb-8">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Supplier Performance Ratings</h3>
+        <div style="height: 350px;"> 
+            <canvas id="supplierPerformanceChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- Activity Details Modal -->
+<div id="activityDetailsModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-2/3 lg:w-1/2 flex flex-col p-6 glass-effect border">
+        <div class="flex justify-between items-center pb-4 border-b border-gray-200 mb-4">
+            <h3 id="modalActivityTitle" class="text-2xl font-bold text-primary">Activity Details</h3>
+            <button id="closeActivityDetailsModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div id="activityDetailsContent" class="text-gray-700 space-y-3 overflow-y-auto max-h-[70vh]">
+            <p><strong>Activity ID:</strong> <span id="modalActivityId"></span></p>
+            <p><strong>Type:</strong> <span id="modalActivityType"></span></p>
+            <p><strong>Date:</strong> <span id="modalActivityDate"></span></p>
+            <p><strong>Item/Material:</strong> <span id="modalActivityItem"></span></p>
+            <p><strong>Quantity:</strong> <span id="modalActivityQuantity"></span></p>
+            <p><strong>Unit Price (if applicable):</strong> <span id="modalActivityUnitPrice"></span></p>
+            <p><strong>Total Value (if applicable):</strong> <span id="modalActivityTotalValue"></span></p>
+            <p><strong>Supplier/Customer:</strong> <span id="modalActivityParty"></span></p>
+            <p><strong>Status:</strong> <span id="modalActivityStatus"></span></p>
+            <p><strong>Notes:</strong> <span id="modalActivityNotes"></span></p>
+            <p class="text-sm text-gray-500 mt-4">Further details like related documents, approval history, and specific line items can be integrated here.</p>
+        </div>
+    </div>
+</div>

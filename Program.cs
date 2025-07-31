@@ -1,5 +1,6 @@
 using ERP_BI_Operations.Data;
 using ERP_BI_Operations.Models; // Your custom models namespace
+using ERP_BI_Operations.Services;
 using Microsoft.AspNetCore.Identity; // Add this at the top
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +18,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>() // <--- use ApplicationDbContext here
     .AddDefaultTokenProviders();
 
+// Add your FinancialForecastingService as a scoped service
+builder.Services.AddScoped<ForecastingService>();
+builder.Services.AddScoped<FinancialForecastingService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 
@@ -34,6 +40,9 @@ else
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+
+// In Program.cs (relevant snippet)
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

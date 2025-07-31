@@ -1,4 +1,69 @@
-﻿@page
+﻿@page "{id:int?}"
 @model MyApp.Namespace.EditEmployeeModel
+
 @{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Edit Employee</h2>
+
+    <form method="post">
+        <input type="hidden" asp-for="Employee.EmployeeId" />
+
+        <div class="mb-4">
+            <label asp-for="Employee.FirstName" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Employee.FirstName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="Employee.FirstName" class="text-red-500 text-xs italic"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Employee.LastName" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Employee.LastName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="Employee.LastName" class="text-red-500 text-xs italic"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Employee.JobTitle" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Employee.JobTitle" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="Employee.JobTitle" class="text-red-500 text-xs italic"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Employee.ContactInfo" class="block text-gray-700 text-sm font-bold mb-2"></label>
+            <input asp-for="Employee.ContactInfo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="Employee.ContactInfo" class="text-red-500 text-xs italic"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Employee.DepartmentId" class="block text-gray-700 text-sm font-bold mb-2">Department</label>
+            <select asp-for="Employee.DepartmentId" asp-items="Model.DepartmentsList" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">-- Select Department --</option>
+            </select>
+            <span asp-validation-for="Employee.DepartmentId" class="text-red-500 text-xs italic"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Employee.CompanyId" class="block text-gray-700 text-sm font-bold mb-2">Company</label>
+            <select asp-for="Employee.CompanyId" asp-items="Model.CompaniesList" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">-- Select Company --</option>
+            </select>
+            <span asp-validation-for="Employee.CompanyId" class="text-red-500 text-xs italic"></span>
+        </div>
+
+        <div class="flex items-center justify-between mt-6">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                Save Changes
+            </button>
+            <a asp-page="./ListEmployees" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

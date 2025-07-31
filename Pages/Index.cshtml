@@ -4,9 +4,97 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="mx-auto p-4 sm:p-6 lg:p-8 h-full overflow-y-auto">
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-blue-600 to-purple-700 text-white rounded-3xl shadow-2xl p-8 md:p-12 lg:p-16 mb-12 overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-20" style="background-image: url('https://placehold.co/1920x1080/000000/FFFFFF?text=Abstract+Data+Flow'); background-size: cover; background-position: center;"></div>
+        <div class="relative z-10 text-center">
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-4 animate-fade-in-down">
+                Empower Your Business with <br class="hidden sm:inline">Intelligent Operations
+            </h1>
+            <p class="text-xl md:text-2xl font-light mb-8 opacity-90 animate-fade-in-up">
+                Seamlessly integrate, analyze, and optimize your ERP and Business Intelligence processes.
+            </p>
+            <a href="#dashboards" class="btn-themed-hero inline-flex items-center px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300 animate-bounce-once">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Explore Your Dashboards
+            </a>
+        </div>
+    </section>
+
+    <!-- Key Module Highlights -->
+    <section class="mb-12">
+        <h2 class="text-3xl md:text-4xl font-extrabold themed-heading text-center mb-10 border-b-4 pb-3 inline-block mx-auto">
+            Core Modules & Capabilities
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="module-card glass-effect rounded-2xl p-8 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out text-center">
+                <div class="text-blue-500 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-primary mb-3">Financial Management</h3>
+                <p class="text-secondary leading-relaxed">Gain full control over your finances with real-time insights, budgeting, and reporting tools.</p>
+                <a href="/FinancialSnapshots/ListFinancialSnapshot" class="text-blue-600 hover:text-blue-800 font-semibold mt-4 inline-block">Learn More &rarr;</a>
+            </div>
+            <div class="module-card glass-effect rounded-2xl p-8 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out text-center">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.146-1.284-.42-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.146-1.284.42-1.857m0 0a5.002 5.002 0 019.16 0m0 0C14.686 15.602 14 14.104 14 12.5c0-1.25.32-2.43.88-3.476m-4.045 4.045a5.002 5.002 0 01-9.16 0"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-primary mb-3">Human Resources</h3>
+                <p class="text-secondary leading-relaxed">Streamline HR processes from recruitment to payroll, fostering a productive workforce.</p>
+                <a href="/Dashboards/HR" class="text-blue-600 hover:text-blue-800 font-semibold mt-4 inline-block">Learn More &rarr;</a>
+            </div>
+            <div class="module-card glass-effect rounded-2xl p-8 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out text-center">
+                <div class="text-purple-500 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-primary mb-3">Operations & Supply Chain</h3>
+                <p class="text-secondary leading-relaxed">Optimize your operational workflows, inventory, and supply chain for maximum efficiency.</p>
+                <a asp-page="/MaterialUsage/ListMaterialUsage" class="nav-link text-blue-600 hover:text-blue-800 font-semibold mt-4 inline-block">
+                    Material Usage
+                </a>            </div>
+            <div class="module-card glass-effect rounded-2xl p-8 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out text-center">
+                <div class="text-red-500 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-primary mb-3">Business Intelligence</h3>
+                <p class="text-secondary leading-relaxed">Transform raw data into actionable insights with powerful analytics and customizable dashboards.</p>
+                <a href="/KPIs/ListKPIs" class="text-blue-600 hover:text-blue-800 font-semibold mt-4 inline-block">Learn More &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Quick Access / Featured Dashboards -->
+    <section id="dashboards" class="mb-12">
+        <h2 class="text-3xl md:text-4xl font-extrabold themed-heading text-center mb-10 border-b-4 pb-3 inline-block mx-auto">
+            Quick Access Dashboards
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+            <a href="/Materials" class="dashboard-link-card glass-effect rounded-2xl p-6 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out flex flex-col items-center text-center">
+                <div class="text-yellow-500 mb-4">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-4 0h8a2 2 0 002-2V7a2 2 0 00-2-2H8a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-primary mb-2">Inventory Control</h3>
+                <p class="text-secondary">Manage material stock, track quantities, and optimize supply.</p>
+            </a>
+            <a href="/Projects" class="dashboard-link-card glass-effect rounded-2xl p-6 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out flex flex-col items-center text-center">
+                <div class="text-teal-500 mb-4">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 2v-6m2 8H7m6 1a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-primary mb-2">Project Management</h3>
+                <p class="text-secondary">Oversee project progress, resources, and financial summaries.</p>
+            </a>
+            <a href="/Customers" class="dashboard-link-card glass-effect rounded-2xl p-6 border border-opacity-30 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out flex flex-col items-center text-center">
+                <div class="text-pink-500 mb-4">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM12 18H9a2 2 0 00-2 2v1h6v-1a2 2 0 00-2-2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-primary mb-2">Customer Relations</h3>
+                <p class="text-secondary">Manage customer data, interactions, and sales history.</p>
+            </a>
+        </div>
+    </section>
+
 </div>
-<li><a asp-page="/Accounts/ListAccounts">Accounts</a></li>
-<li><a asp-page="/APInvoices/ListAPInvoice">AP Invoices</a></li>

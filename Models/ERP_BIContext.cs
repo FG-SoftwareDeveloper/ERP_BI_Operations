@@ -81,6 +81,8 @@ public partial class ERP_BIContext : DbContext
 
     public virtual DbSet<Vendor> Vendors { get; set; }
 
+    public virtual DbSet<AccountHistory> AccountHistories { get; set; } // Assuming FinancialReport is another entity in your model
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>

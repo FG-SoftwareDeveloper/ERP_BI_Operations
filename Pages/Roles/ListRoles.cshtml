@@ -1,0 +1,46 @@
+﻿@page
+@model MyApp.Namespace.ListRolesModel
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Roles Overview</h2>
+
+    <div class="mb-6 flex flex-wrap gap-4 items-center">
+        <button id="toggleViewBtn_rolesTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Switch to Card View
+        </button>
+        <!-- No Chart Toggle Button for Roles as it's not typically a chartable data set -->
+    </div>
+
+    <!-- Roles Table -->
+    <table id="rolesTable" class="display w-full text-left border-collapse rounded-lg shadow-md" style="width:100%">
+        <thead class="bg-blue-100 text-blue-800">
+            <tr>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider rounded-tl-lg">Role ID</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider">Role Name</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider">Description</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider rounded-tr-lg">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- DataTables will populate this tbody -->
+        </tbody>
+    </table>
+
+    <!-- Card View Container (initially hidden, populated by JS) -->
+    <div id="rolesTable-card-view" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;">
+        <!-- Cards will be rendered here by JavaScript -->
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // All DataTable initialization and toggle logic is now handled in site.js.
+            // No page-specific JS functions needed here.
+        });
+    </script>
+}

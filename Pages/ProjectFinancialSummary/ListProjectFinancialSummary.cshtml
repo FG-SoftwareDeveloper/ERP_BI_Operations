@@ -1,0 +1,177 @@
+﻿@page
+@model MyApp.Namespace.ListProjectFinancialSummaryModel
+@{
+    ViewData["Title"] = "Project Financial Forecast Dashboard";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="p-6 max-w-7xl mx-auto space-y-8">
+    <h1 class="text-4xl font-bold text-center text-blue-800">📊 Project Financial Forecast Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-4">
+            <h2 class="text-xl font-semibold text-blue-700 mb-2">Cash Balance Forecast</h2>
+            <canvas id="cashChart"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-4">
+            <h2 class="text-xl font-semibold text-green-700 mb-2">Material Cost Forecast</h2>
+            <canvas id="materialChart"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-4 col-span-1 md:col-span-2">
+            <h2 class="text-xl font-semibold text-purple-700 mb-2">Equipment Cost Forecast</h2>
+            <canvas id="equipmentChart"></canvas>
+        </div>
+    </div>
+
+    <div class="bg-gray-100 rounded-lg p-6 shadow-inner mt-8">
+        <h3 class="text-2xl font-bold mb-4 text-gray-700">⚙️ What-If Cost Reduction Scenario</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <select id="costType" class="form-select">
+                <option value="MaterialCost">Material Cost</option>
+                <option value="EquipmentCost">Equipment Cost</option>
+            </select>
+            <input type="number" id="reduction" class="form-input" placeholder="Enter % Reduction (e.g., 10)" />
+            <button id="simulateBtn" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Simulate</button>
+        </div>
+        <div class="mt-4 hidden" id="whatIfResult">
+            <h4 class="text-lg font-semibold text-gray-800">📉 Simulated Forecast</h4>
+            <canvas id="whatIfChart" class="mt-2"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let charts = {};
+
+        function destroyIfExists(id) {
+            if (charts[id]) {
+                charts[id].destroy();
+                delete charts[id];
+            }
+        }
+
+        // Helper to normalize property casing from API
+        function normalizeData(data) {
+            // Handles both camelCase and PascalCase
+            return data.map(x => ({
+                date: x.date || x.Date,
+                value: x.value ?? x.Value
+            }));
+        }
+
+        async function loadForecast(endpoint, chartId, label, borderColor, backgroundColor) {
+            try {
+                console.log(`Fetching forecast for: ${endpoint}`);
+                const res = await fetch(`/api/FinancialForecasts/${endpoint}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                let data = await res.json();
+                console.log(`Received data for ${endpoint}:`, data);
+
+                // Normalize property names in case API returns PascalCase
+                data = normalizeData(data);
+
+                // Log after normalization for debugging
+                console.log(`Normalized data for ${endpoint}:`, data);
+
+                const labels = data.map(x => x.date);
+                const values = data.map(x => x.value);
+
+                destroyIfExists(chartId); // Clear old chart
+
+                charts[chartId] = new Chart(document.getElementById(chartId), {
+                    type: 'bar', // Changed from 'line' to 'bar'
+                    data: {
+                        labels,
+                        datasets: [{
+                            label,
+                            data: values,
+                            backgroundColor, // Use backgroundColor for bars
+                            borderColor,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: label }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error(`Failed to load forecast for ${endpoint}:`, err);
+            }
+        }
+
+        // Initial chart loads
+        loadForecast("cashbalance", "cashChart", "Cash Balance", "rgba(37, 99, 235, 0.8)", "rgba(59, 130, 246, 0.5)");
+        loadForecast("materialcost", "materialChart", "Material Cost", "rgba(16, 185, 129, 0.8)", "rgba(34, 197, 94, 0.5)");
+        loadForecast("equipmentcost", "equipmentChart", "Equipment Cost", "rgba(139, 92, 246, 0.8)", "rgba(168, 85, 247, 0.5)");
+
+        document.getElementById("simulateBtn").addEventListener("click", async () => {
+            const costType = document.getElementById("costType").value;
+            const reduction = parseFloat(document.getElementById("reduction").value);
+            if (isNaN(reduction) || reduction <= 0 || reduction >= 100) {
+                alert("Enter a valid reduction percentage between 0 and 100.");
+                return;
+            }
+
+            try {
+                console.log(`Simulating reduction for ${costType} by ${reduction}%`);
+
+                const res = await fetch(`/api/FinancialForecasts/whatif/costreduction?costType=${costType}&reductionPercentage=${reduction}`);
+
+                if (!res.ok) throw new Error(`Simulation failed: HTTP ${res.status}`);
+
+                const result = await res.json();
+                console.log(`What-if result:`, result);
+
+                // Destroy previous what-if chart before creating a new one
+                destroyIfExists("whatIfChart");
+
+                const labels = result.results.map(x => x.date);
+                const values = result.results.map(x => x.value);
+
+                document.getElementById("whatIfResult").classList.remove("hidden");
+
+                charts["whatIfChart"] = new Chart(document.getElementById("whatIfChart"), {
+                    type: 'bar', // Changed from 'line' to 'bar'
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: `Simulated ${costType} w/ ${reduction}% Reduction`,
+                            data: values,
+                            backgroundColor: "rgba(239, 68, 68, 0.5)",
+                            borderColor: "rgba(239, 68, 68, 0.8)",
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: `What-If Analysis: ${costType}` }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error("Error during what-if simulation:", err);
+                alert("Simulation failed. See console for details.");
+            }
+        });
+
+    </script>
+}

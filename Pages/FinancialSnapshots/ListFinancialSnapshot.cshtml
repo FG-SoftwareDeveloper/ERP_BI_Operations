@@ -2,3 +2,297 @@
 @model MyApp.Namespace.ListFinancialSnapshotModel
 @{
 }
+<div class=" mx-auto p-4 sm:p-6 lg:p-8 glass-effect rounded-lg h-full overflow-y-auto">
+    <h2 class="text-4xl themed-heading font-extrabold mb-6 border-b-4 pb-2 inline-block">Financial Snapshots Dashboard</h2>
+
+    <!-- Financial Summary KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Latest Net Profit</h3>
+            <p class="text-4xl font-bold text-green-600 mt-auto" id="kpiNetProfit">$0.00</p>
+            <span class="text-sm text-gray-500">As of latest snapshot</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Total Revenue (YTD)</h3>
+            <p class="text-4xl font-bold text-blue-600 mt-auto" id="kpiTotalRevenueYTD">$0.00</p>
+            <span class="text-sm text-gray-500">Year-to-date cumulative</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Cash on Hand</h3>
+            <p class="text-4xl font-bold text-purple-600 mt-auto" id="kpiCashBalance">$0.00</p>
+            <span class="text-sm text-gray-500">Current available cash</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Accounts Receivable</h3>
+            <p class="text-4xl font-bold text-orange-600 mt-auto" id="kpiAccountsReceivable">$0.00</p>
+            <span class="text-sm text-gray-500">Outstanding payments due</span>
+        </div>
+    </div>
+
+    <!-- Filter and Action Buttons -->
+    <div class="mb-8 p-6 glass-effect rounded-xl border shadow-md">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Filter Financial Data</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div>
+                <label for="companyIdFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company ID</label>
+                <input type="number" id="companyIdFilter" placeholder="Filter by Company ID..." class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="startDateFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date</label>
+                <input type="date" id="startDateFilter" class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="endDateFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date</label>
+                <input type="date" id="endDateFilter" class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center">
+            <button id="applyFiltersBtn" class="flex items-center px-6 py-3 btn-themed font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                Apply Filters
+            </button>
+            <button id="clearFiltersBtn" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-gray-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                Clear Filters
+            </button>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Generate New Snapshot
+            </button>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Export Data
+            </button>
+            <button id="toggleViewBtn_financialSnapshotsTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Switch to Card View
+            </button>
+            <button id="toggleChartBtn_financialSnapshotsTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-7 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>
+                Show Charts
+            </button>
+        </div>
+    </div>
+
+    <!-- Financial Snapshots Table -->
+    <div class="mb-8">
+        <h3 class="text-2xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Detailed Financial Snapshots</h3>
+        <table id="financialSnapshotsTable" class="display w-full text-left border-collapse rounded-lg shadow-md" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-xl">Snapshot ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Date</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Company ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Revenue</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Expenses</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Net Profit</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Cash Balance</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">A/R Balance</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">A/P Balance</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Payroll Cost</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Equipment Cost</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Material Cost</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Other Metric 1</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tr-xl">Other Metric 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* DataTables will populate this tbody *@
+            </tbody>
+        </table>
+
+        <div id="financialSnapshotsTable-card-view" class="mt-8 cards-grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;"></div>
+        <div id="financialSnapshotsTable-chart-container" class="mt-8 bg-white p-6 rounded-lg shadow-lg" style="display: none;">
+            <canvas id="financialSnapshotsTable-chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Additional Financial Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Cost Breakdown by Type</h3>
+            <div style="height: 300px;"> 
+                <canvas id="costBreakdownChart"></canvas>
+            </div>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Balance Sheet Overview (Latest)</h3>
+            <div style="height: 300px;"> 
+                <canvas id="balanceSheetChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const financialSnapshotsTableId = "financialSnapshotsTable";
+
+            LoadDataTable({
+                tableId: financialSnapshotsTableId,
+                ajaxUrl: "/api/FinancialSnapshots",
+                columns: [
+                    { data: "snapshotId", title: "Snapshot ID" },
+                    { data: "snapshotDate", title: "Snapshot Date", render: function (data) { return data ? new Date(data).toLocaleDateString() : ""; } },
+                    { data: "companyId", title: "Company ID" },
+                    { data: "totalRevenue", title: "Total Revenue", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "totalExpenses", title: "Total Expenses", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "netProfit", title: "Net Profit", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "cashBalance", title: "Cash Balance", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "accountsReceivable", title: "Accounts Receivable", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "accountsPayable", title: "Accounts Payable", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "payrollCost", title: "Payroll Cost", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "equipmentCost", title: "Equipment Cost", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "materialCost", title: "Material Cost", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "otherMetric1", title: "Other Metric 1" },
+                    { data: "otherMetric2", title: "Other Metric 2" }
+                ],
+                pageLength: 10,
+                initialIsCardView: false,
+                initialIsChartView: false,
+                cardViewRender: function (data) {
+                    return `
+                        <div class="data-card bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+                            <h3 class="text-xl font-bold text-blue-700 mb-2">Snapshot: ${data.snapshotDate ? new Date(data.snapshotDate).toLocaleDateString() : "N/A"}</h3>
+                            <div class="card-item"><strong>ID:</strong> <span>${data.snapshotId}</span></div>
+                            <div class="card-item"><strong>Company ID:</strong> <span>${data.companyId}</span></div>
+                            <div class="card-item"><strong>Total Revenue:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.totalRevenue)}</span></div>
+                            <div class="card-item"><strong>Total Expenses:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.totalExpenses)}</span></div>
+                            <div class="card-item"><strong>Net Profit:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.netProfit)}</span></div>
+                            <div class="card-item"><strong>Cash Balance:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.cashBalance)}</span></div>
+                            <div class="card-item"><strong>Accounts Receivable:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.accountsReceivable)}</span></div>
+                            <div class="card-item"><strong>Accounts Payable:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.accountsPayable)}</span></div>
+                            <div class="card-item"><strong>Payroll Cost:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.payrollCost)}</span></div>
+                            <div class="card-item"><strong>Equipment Cost:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.equipmentCost)}</span></div>
+                            <div class="card-item"><strong>Material Cost:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.materialCost)}</span></div>
+                            <div class="card-item"><strong>Other Metric 1:</strong> <span>${data.otherMetric1 ?? "N/A"}</span></div>
+                            <div class="card-item"><strong>Other Metric 2:</strong> <span>${data.otherMetric2 ?? "N/A"}</span></div>
+                        </div>
+                    `;
+                },
+                chartConfig: {
+                    type: 'line',
+                    processData: function (apiData, columns) {
+                        // Sort by snapshotDate ascending
+                        apiData.sort((a, b) => new Date(a.snapshotDate) - new Date(b.snapshotDate));
+                        const labels = apiData.map(item => item.snapshotDate ? new Date(item.snapshotDate).toLocaleDateString() : "");
+                        return {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Total Revenue',
+                                    data: apiData.map(item => item.totalRevenue),
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Total Expenses',
+                                    data: apiData.map(item => item.totalExpenses),
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Net Profit',
+                                    data: apiData.map(item => item.netProfit),
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.3
+                                }
+                            ]
+                        };
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Financial Snapshot Trends',
+                                font: { size: 20, family: 'Inter, sans-serif', weight: 'bold' },
+                                color: '#333'
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { family: 'Inter, sans-serif' }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        font: {
+                            family: 'Inter, sans-serif'
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Snapshot Date',
+                                    font: { size: 14, family: 'Inter, sans-serif' }
+                                },
+                                grid: { display: false },
+                                ticks: { font: { family: 'Inter, sans-serif' } }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Amount ($)',
+                                    font: { size: 14, family: 'Inter, sans-serif' }
+                                },
+                                grid: { color: 'rgba(200, 200, 200, 0.2)' }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Table/Card toggle button
+            $(`#toggleViewBtn_${financialSnapshotsTableId}`).on('click', function () {
+                toggleTableView(financialSnapshotsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[financialSnapshotsTableId];
+                if (instanceState.isCardView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>Switch to Table View');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Switch to Card View');
+                }
+            });
+
+            // Chart toggle button
+            $(`#toggleChartBtn_${financialSnapshotsTableId}`).on('click', function () {
+                toggleChartView(financialSnapshotsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[financialSnapshotsTableId];
+                if (instanceState.isChartView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-6 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>Show Table/Card');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>Show Chart');
+                }
+            });
+        });
+    </script>
+}

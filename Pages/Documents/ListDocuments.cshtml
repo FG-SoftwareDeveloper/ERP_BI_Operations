@@ -1,4 +1,275 @@
 ﻿@page
 @model MyApp.Namespace.ListDocumentsModel
 @{
+    ViewData["Title"] = "Documents";
+}
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Documents Overview</h2>
+
+    <div class="mb-6 flex flex-wrap gap-4 items-center">
+        <button id="toggleViewBtn_documentsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Switch to Card View
+        </button>
+        <button id="toggleChartBtn_documentsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
+            Show Chart
+        </button>
+    </div>
+
+    <!-- Documents Table Container -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-lg p-4">
+        <table id="documentsTable" class="min-w-full leading-normal">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-xl">Document ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Document Name</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Document Type</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">File Path/URL</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Upload Date</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Project ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-xl">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* DataTables will populate this tbody *@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Document Viewer Modal -->
+<div id="documentModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 h-5/6 flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b border-gray-200">
+            <h3 id="documentModalTitle" class="text-xl font-semibold text-gray-800">View Document</h3>
+            <button id="closeDocumentModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="flex-grow p-4 overflow-hidden">
+            <iframe id="documentViewerFrame" src="" class="w-full h-full border-0 rounded-md"></iframe>
+            <img id="documentViewerImage" src="" class="w-full h-full object-contain hidden" alt="Document Preview">
+            <p id="documentViewerError" class="text-red-500 text-center hidden">Could not display document. File type might not be supported or URL is invalid.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Function to open the document modal
+        function openDocumentModal(url, documentName) {
+            const modal = document.getElementById('documentModal');
+            const iframe = document.getElementById('documentViewerFrame');
+            const img = document.getElementById('documentViewerImage');
+            const errorText = document.getElementById('documentViewerError');
+            const title = document.getElementById('documentModalTitle');
+
+            // Reset previous state
+            iframe.src = '';
+            img.src = '';
+            iframe.classList.add('hidden');
+            img.classList.add('hidden');
+            errorText.classList.add('hidden');
+            title.textContent = documentName || 'View Document'; // Set modal title
+
+            if (!url) {
+                errorText.textContent = "Document URL is missing.";
+                errorText.classList.remove('hidden');
+                modal.classList.remove('hidden');
+                return;
+            }
+
+            const fileExtension = url.split('.').pop().toLowerCase();
+
+            // Attempt to determine file type and display accordingly
+            if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+                img.src = url;
+                img.classList.remove('hidden');
+            } else if (['pdf', 'html', 'htm'].includes(fileExtension)) {
+                iframe.src = url;
+                iframe.classList.remove('hidden');
+            } else {
+                // For other types, try iframe, but show a warning
+                iframe.src = url;
+                iframe.classList.remove('hidden');
+                errorText.textContent = `Note: This file type (.${fileExtension}) might not display correctly in the viewer.`;
+                errorText.classList.remove('hidden');
+            }
+
+            modal.classList.remove('hidden'); // Show the modal
+        }
+
+        // Function to close the document modal
+        function closeDocumentModal() {
+            const modal = document.getElementById('documentModal');
+            const iframe = document.getElementById('documentViewerFrame');
+            const img = document.getElementById('documentViewerImage');
+
+            iframe.src = ''; // Clear iframe src to stop any loading
+            img.src = ''; // Clear image src
+            modal.classList.add('hidden'); // Hide the modal
+        }
+
+        $(document).ready(function () {
+            const documentsTableId = "documentsTable"; // Specific ID for Documents table
+
+            // Attach event listener to close button
+            document.getElementById('closeDocumentModalBtn').addEventListener('click', closeDocumentModal);
+
+            LoadDataTable({
+                tableId: documentsTableId,
+                ajaxUrl: "/api/Documents", // Your API endpoint for Documents
+                columns: [
+                    { data: "documentId", title: "Document ID" }, // Assuming property name is documentId
+                    { data: "documentName", title: "Document Name" }, // Assuming property name is documentName
+                    { data: "documentType", title: "Document Type" }, // Assuming property name is documentType
+                    {
+                        data: "filePathURL",
+                        title: "File Path/URL",
+                        render: function (data, type, row) {
+                            if (data) {
+                                // Make the URL clickable and open in modal
+                                return `<a href="#" onclick="openDocumentModal('${data}', '${row.documentName.replace(/'/g, "\\'")}')" class="text-blue-600 hover:underline">${data}</a>`;
+                            }
+                            return 'N/A';
+                        }
+                    },
+                    {
+                        data: "uploadDate",
+                        title: "Upload Date",
+                        render: function (data) {
+                            if (data) {
+                                return new Date(data).toLocaleString(); // Example: MM/DD/YYYY, HH:MM AM/PM
+                            }
+                            return '';
+                        }
+                    },
+                    { data: "projectId", title: "Project ID" }, // Assuming property name is projectId
+                    {
+                        data: null,
+                        title: "Actions",
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            const documentId = row.documentId; // Assuming primary key is documentId
+                            return `
+                                <a href="/Documents/Edit/${documentId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 mr-2">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                    Edit
+                                </a>
+                                <a href="/Documents/Delete/${documentId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" onclick="return confirm('Are you sure you want to delete this Document?');">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    Delete
+                                </a>
+                            `;
+                        }
+                    }
+                ],
+                pageLength: 10,
+                initialIsCardView: false,
+                initialIsChartView: false,
+                chartConfig: {
+                    type: 'pie', // Pie chart to visualize document types distribution
+                    processData: function (apiData, columns) {
+                        console.log("Processing data for Documents chart:", apiData);
+
+                        const documentTypeCounts = {};
+                        apiData.forEach(item => {
+                            const type = item.documentType || 'Unknown';
+                            documentTypeCounts[type] = (documentTypeCounts[type] || 0) + 1;
+                        });
+
+                        const labels = Object.keys(documentTypeCounts);
+                        const dataValues = Object.values(documentTypeCounts);
+
+                        // Generate a color palette
+                        const backgroundColors = [
+                            'rgba(255, 99, 132, 0.6)', // Red
+                            'rgba(54, 162, 235, 0.6)', // Blue
+                            'rgba(255, 206, 86, 0.6)', // Yellow
+                            'rgba(75, 192, 192, 0.6)', // Green
+                            'rgba(153, 102, 255, 0.6)', // Purple
+                            'rgba(255, 159, 64, 0.6)', // Orange
+                            'rgba(199, 199, 199, 0.6)', // Gray
+                            'rgba(83, 102, 255, 0.6)' // Indigo
+                        ];
+                        const borderColors = backgroundColors.map(color => color.replace('0.6', '1'));
+
+                        return {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Number of Documents',
+                                data: dataValues,
+                                backgroundColor: backgroundColors.slice(0, labels.length),
+                                borderColor: borderColors.slice(0, labels.length),
+                                borderWidth: 1
+                            }]
+                        };
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Document Type Distribution', // Chart title
+                                font: { size: 20, family: 'Inter, sans-serif', weight: 'bold' },
+                                color: '#333'
+                            },
+                            legend: {
+                                display: true,
+                                position: 'right', // Place legend on the right for pie chart
+                                labels: {
+                                    font: { family: 'Inter, sans-serif' }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw;
+                                        const total = context.dataset.data.reduce((sum, current) => sum + current, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1) + '%';
+                                        return `${label}: ${value} (${percentage})`;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        font: {
+                            family: 'Inter, sans-serif'
+                        }
+                    }
+                }
+            });
+
+            // Event listener for the table/card toggle button
+            $(`#toggleViewBtn_${documentsTableId}`).on('click', function () {
+                toggleTableView(documentsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[documentsTableId];
+                if (instanceState.isCardView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>Switch to Table View');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Switch to Card View');
+                }
+            });
+
+            // Event listener for the chart toggle button
+            $(`#toggleChartBtn_${documentsTableId}`).on('click', function () {
+                toggleChartView(documentsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[documentsTableId];
+                 if (instanceState.isChartView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-6 0V7m0 10a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>Show Table/Card');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>Show Chart');
+                }
+            });
+        });
+    </script>
 }

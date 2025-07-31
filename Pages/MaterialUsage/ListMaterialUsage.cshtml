@@ -1,0 +1,537 @@
+﻿@page
+@model MyApp.Namespace.ListMaterialUsageModel
+@{
+    ViewData["Title"] = "Material Usage";
+}
+
+<div class="mx-auto p-4 sm:p-6 lg:p-8 glass-effect rounded-lg h-full overflow-y-auto">
+    <h2 class="text-4xl themed-heading font-extrabold mb-6 border-b-4 pb-2 inline-block">Materials Management Dashboard</h2>
+
+    <!-- Material Inventory KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Total Unique Materials</h3>
+            <p class="text-4xl font-bold text-blue-600 mt-auto" id="kpiTotalUniqueMaterials">0</p>
+            <span class="text-sm text-gray-500">Distinct material types in stock</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Low Stock Items</h3>
+            <p class="text-4xl font-bold text-orange-600 mt-auto" id="kpiLowStockItems">0</p>
+            <span class="text-sm text-gray-500">Items below minimum reorder level</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Total Inventory Value</h3>
+            <p class="text-4xl font-bold text-purple-600 mt-auto" id="kpiTotalInventoryValue">$0.00</p>
+            <span class="text-sm text-gray-500">Estimated total value of current stock</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Recently Added Materials (Last 30 Days)</h3>
+            <p class="text-4xl font-bold text-green-600 mt-auto" id="kpiRecentlyAdded">0</p>
+            <span class="text-sm text-gray-500">New materials added to inventory</span>
+        </div>
+    </div>
+
+    <!-- Filter and Action Buttons -->
+    <div class="mb-8 p-6 glass-effect rounded-xl border shadow-md">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Filter Materials</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div>
+                <label for="materialNameFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Material Name</label>
+                <input type="text" id="materialNameFilter" placeholder="Search by name..." class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="materialCategoryFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                <select id="materialCategoryFilter" class="form-select w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="">All Categories</option>
+                    <option value="Raw Materials">Raw Materials</option>
+                    <option value="Components">Components</option>
+                    <option value="Finished Goods">Finished Goods</option>
+                    <option value="Packaging">Packaging</option>
+                    <option value="Consumables">Consumables</option>
+                </select>
+            </div>
+            <div>
+                <label for="quantityMinFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Min Quantity</label>
+                <input type="number" id="quantityMinFilter" placeholder="Min. quantity" class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="supplierFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Supplier</label>
+                <input type="text" id="supplierFilter" placeholder="Search by supplier..." class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center">
+            <a href="/Materials/Create" class="flex items-center px-6 py-3 btn-themed font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Add New Material
+            </a>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.146-1.284-.42-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.146-1.284.42-1.857m0 0a5.002 5.002 0 019.16 0m0 0C14.686 15.602 14 14.104 14 12.5c0-1.25.32-2.43.88-3.476m-4.045 4.045a5.002 5.002 0 01-9.16 0"></path></svg>
+                Manage Suppliers
+            </button>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                Conduct Inventory Audit
+            </button>
+            <button id="toggleViewBtn_materialsTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Switch to Card View
+            </button>
+            <button id="toggleChartBtn_materialsTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-7 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>
+                Show Chart
+            </button>
+        </div>
+    </div>
+
+    <!-- Materials Table Container -->
+    <div class="mb-8">
+        <h3 class="text-2xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">All Materials</h3>
+        <table id="materialsTable" class="display w-full text-left border-collapse rounded-lg shadow-md" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-xl">Material ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Category</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Unit</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Quantity On Hand</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Unit Price</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Supplier ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tr-xl">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* DataTables will populate this tbody *@
+            </tbody>
+        </table>
+
+        <div id="materialsTable-card-view" class="mt-8 cards-grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;"></div>
+        <div id="materialsTable-chart-container" style="display: none;">
+            <canvas id="materialsTable-chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Material Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Material Stock Levels by Category</h3>
+            <div style="height: 300px;">
+                <canvas id="materialStockLevelsChart"></canvas>
+            </div>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Material Value Distribution</h3>
+            <div style="height: 300px;">
+                <canvas id="materialValueDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-card glass-effect rounded-xl p-6 border shadow-md mb-8">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Material Usage Trend (Last 12 Months)</h3>
+        <div style="height: 350px;">
+            <canvas id="materialUsageTrendChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- Material Details Modal -->
+<div id="materialDetailsModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-1/2 lg:w-1/3 flex flex-col p-6 glass-effect border">
+        <div class="flex justify-between items-center pb-4 border-b border-gray-200 mb-4">
+            <h3 id="materialModalTitle" class="text-2xl font-bold text-primary">Material Details</h3>
+            <button id="closeMaterialDetailsModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div id="materialDetailsContent" class="text-gray-700 space-y-3 overflow-y-auto max-h-[70vh]">
+            <p><strong>Material ID:</strong> <span id="modalMaterialId"></span></p>
+            <p><strong>Name:</strong> <span id="modalMaterialName"></span></p>
+            <p><strong>Category:</strong> <span id="modalMaterialCategory"></span></p>
+            <p><strong>Unit of Measure:</strong> <span id="modalUnitOfMeasure"></span></p>
+            <p><strong>Quantity On Hand:</strong> <span id="modalQuantityOnHand"></span></p>
+            <p><strong>Unit Price:</strong> <span id="modalUnitPrice"></span></p>
+            <p><strong>Total Value:</strong> <span id="modalTotalValue"></span></p>
+            <p><strong>Supplier ID:</strong> <span id="modalSupplierId"></span></p>
+            <p><strong>Minimum Stock Level:</strong> <span id="modalMinimumStockLevel"></span></p>
+            <p class="text-sm text-gray-500 mt-4">Further details like reorder history, consumption rates, and associated products can be integrated here.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        // Function to open the material details modal
+        function openMaterialDetailsModal(material) {
+            const modal = document.getElementById('materialDetailsModal');
+            document.getElementById('modalMaterialId').textContent = material.materialId;
+            document.getElementById('modalMaterialName').textContent = material.materialName;
+            document.getElementById('modalMaterialCategory').textContent = material.materialCategory || 'N/A'; // Assuming a category field
+            document.getElementById('modalUnitOfMeasure').textContent = material.unitOfMeasure || 'N/A';
+            document.getElementById('modalQuantityOnHand').textContent = material.quantityOnHand;
+            document.getElementById('modalUnitPrice').textContent = material.unitPrice ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(material.unitPrice) : 'N/A';
+            const totalValue = (material.quantityOnHand || 0) * (material.unitPrice || 0);
+            document.getElementById('modalTotalValue').textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totalValue);
+            document.getElementById('modalSupplierId').textContent = material.supplierId || 'N/A';
+            document.getElementById('modalMinimumStockLevel').textContent = material.minimumStockLevel || 'N/A'; // Assuming a minimumStockLevel field
+            document.getElementById('materialModalTitle').textContent = `Details: ${material.materialName}`;
+            modal.classList.remove('hidden'); // Show the modal
+        }
+
+        // Function to close the material details modal
+        function closeMaterialDetailsModal() {
+            document.getElementById('materialDetailsModal').classList.add('hidden'); // Hide the modal
+        }
+
+        $(document).ready(function () {
+            const materialsTableId = "materialsTable";
+
+            // Function to update KPIs
+            function updateMaterialKPIs(data) {
+                const totalUniqueMaterials = data.length;
+                const lowStockItems = data.filter(item => item.quantityOnHand < (item.minimumStockLevel || 10)).length; // Assuming default low stock threshold of 10
+                const totalInventoryValue = data.reduce((sum, item) => sum + ((item.quantityOnHand || 0) * (item.unitPrice || 0)), 0);
+                const recentlyAdded = data.filter(item => {
+                    // Assuming a 'lastUpdated' or 'creationDate' field for new materials
+                    // For demo, we'll just pick a arbitrary number of items
+                    return true; // Placeholder, implement actual date logic if field exists
+                }).length;
+                // As a placeholder, let's say 5 recently added items for demo
+                const actualRecentlyAdded = Math.min(5, totalUniqueMaterials);
+
+
+                $('#kpiTotalUniqueMaterials').text(totalUniqueMaterials);
+                $('#kpiLowStockItems').text(lowStockItems);
+                $('#kpiTotalInventoryValue').text(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totalInventoryValue));
+                $('#kpiRecentlyAdded').text(actualRecentlyAdded);
+            }
+
+            // Define the DataTables configuration for Materials
+            const materialsTableConfig = {
+                tableId: materialsTableId,
+                ajaxUrl: "/api/Materials", // Assuming an API endpoint for Materials
+                columns: [
+                    { data: "materialId", title: "Material ID" },
+                    { data: "materialName", title: "Name" },
+                    { data: "materialCategory", title: "Category" }, // Assumed field
+                    { data: "unitOfMeasure", title: "Unit" },
+                    { data: "quantityOnHand", title: "Quantity On Hand" },
+                    { data: "unitPrice", title: "Unit Price", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "supplierId", title: "Supplier ID" },
+                    {
+                        data: null,
+                        title: "Actions",
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return `
+                                <button class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 mr-2" onclick="openMaterialDetailsModal(${JSON.stringify(row).replace(/"/g, '&quot;')})">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    View
+                                </button>
+                                <a href="/Materials/Edit/${row.materialId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 mr-2">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                    Edit
+                                </a>
+                                <button class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" onclick="if(confirm('Are you sure you want to delete this Material?')) { /* Implement actual delete logic via AJAX */ alert('Delete functionality not implemented yet.'); }">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    Delete
+                                </button>
+                            `;
+                        }
+                    }
+                ],
+                pageLength: 10,
+                initialIsCardView: false,
+                initialIsChartView: false,
+                cardViewRender: function (data) {
+                    const totalValue = (data.quantityOnHand || 0) * (data.unitPrice || 0);
+                    return `
+                        <div class="data-card glass-effect rounded-xl p-6 border hover:shadow-xl transition-shadow duration-300">
+                            <h3 class="text-xl font-bold text-primary mb-2">${data.materialName} (${data.materialId})</h3>
+                            <div class="card-item"><strong>Category:</strong> <span>${data.materialCategory || 'N/A'}</span></div>
+                            <div class="card-item"><strong>Unit:</strong> <span>${data.unitOfMeasure || 'N/A'}</span></div>
+                            <div class="card-item"><strong>Qty:</strong> <span>${data.quantityOnHand}</span></div>
+                            <div class="card-item"><strong>Unit Price:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.unitPrice)}</span></div>
+                            <div class="card-item"><strong>Total Value:</strong> <span>${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totalValue)}</span></div>
+                            <div class="card-item"><strong>Supplier ID:</strong> <span>${data.supplierId || 'N/A'}</span></div>
+                            <div class="card-actions mt-4">
+                                <button class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 mr-2" onclick="openMaterialDetailsModal(${JSON.stringify(data).replace(/"/g, '&quot;')})">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> View
+                                </button>
+                                <a href="/Materials/Edit/${data.materialId}" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 mr-2">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Edit
+                                </a>
+                                <button class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" onclick="if(confirm('Are you sure you want to delete this Material?')) { /* Implement actual delete logic via AJAX */ alert('Delete functionality not implemented yet.'); }">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                },
+                chartConfig: {
+                    type: 'doughnut', // Chart for Material Stock Levels by Category
+                    processData: function (apiData) {
+                        const categoryQuantities = {};
+                        apiData.forEach(item => {
+                            const category = item.materialCategory || 'Unknown';
+                            categoryQuantities[category] = (categoryQuantities[category] || 0) + (item.quantityOnHand || 0);
+                        });
+
+                        const labels = Object.keys(categoryQuantities);
+                        const dataValues = labels.map(label => categoryQuantities[label]);
+
+                        return {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Quantity On Hand',
+                                data: dataValues,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.6)',
+                                    'rgba(54, 162, 235, 0.6)',
+                                    'rgba(255, 206, 86, 0.6)',
+                                    'rgba(75, 192, 192, 0.6)',
+                                    'rgba(153, 102, 255, 0.6)',
+                                    'rgba(201, 203, 207, 0.6)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(201, 203, 207, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        };
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Material Stock Levels by Category',
+                                color: 'var(--text-primary)'
+                            },
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    color: 'var(--text-primary)'
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Initialize the DataTable for materials
+            LoadDataTable(materialsTableConfig);
+
+            // Material Stock Levels by Category Chart (already part of materialsTableConfig.chartConfig)
+            const materialStockLevelsChartConfig = {
+                chartId: "materialStockLevelsChart",
+                type: 'doughnut',
+                ajaxUrl: "/api/Materials",
+                processData: materialsTableConfig.chartConfig.processData,
+                options: materialsTableConfig.chartConfig.options
+            };
+            initializeChart(materialStockLevelsChartConfig.chartId, materialStockLevelsChartConfig);
+
+            // Material Value Distribution Chart
+            const materialValueDistributionChartConfig = {
+                chartId: "materialValueDistributionChart",
+                type: 'bar',
+                ajaxUrl: "/api/Materials",
+                processData: function (apiData) {
+                    const categoryValues = {};
+                    apiData.forEach(item => {
+                        const category = item.materialCategory || 'Unknown';
+                        categoryValues[category] = (categoryValues[category] || 0) + ((item.quantityOnHand || 0) * (item.unitPrice || 0));
+                    });
+
+                    const labels = Object.keys(categoryValues);
+                    const dataValues = labels.map(label => categoryValues[label]);
+
+                    return {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Inventory Value',
+                            data: dataValues,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(255, 99, 132, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(255, 99, 132, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    };
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Material Value Distribution by Category',
+                            color: 'var(--text-primary)'
+                        },
+                        legend: {
+                            labels: {
+                                color: 'var(--text-primary)'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'var(--text-secondary)' },
+                            grid: { color: 'var(--border-color)' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'var(--text-secondary)',
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+                                }
+                            },
+                            grid: { color: 'var(--border-color)' }
+                        }
+                    }
+                }
+            };
+            initializeChart(materialValueDistributionChartConfig.chartId, materialValueDistributionChartConfig);
+
+            // Material Usage Trend Chart (requires MaterialUsage data)
+            const materialUsageTrendChartConfig = {
+                chartId: "materialUsageTrendChart",
+                type: 'line',
+                ajaxUrl: "/api/MaterialUsage", // Assuming an API for MaterialUsage
+                processData: function (apiData) {
+                    // Dummy data for demonstration if MaterialUsage API is not ready
+                    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const usageQuantities = [120, 150, 130, 180, 200, 170, 220, 210, 250, 230, 260, 240]; // Example usage data
+
+                    // In a real scenario, you'd process apiData from /api/MaterialUsage
+                    // to aggregate usage by month/period.
+                    // Example:
+                    // const monthlyUsage = {};
+                    // apiData.forEach(item => {
+                    //     const month = new Date(item.usageDate).toLocaleString('en-US', { month: 'short' });
+                    //     monthlyUsage[month] = (monthlyUsage[month] || 0) + item.quantityUsed;
+                    // });
+                    // const labels = Object.keys(monthlyUsage);
+                    // const dataValues = labels.map(label => monthlyUsage[label]);
+
+                    return {
+                        labels: months, // Use actual months from processed data if available
+                        datasets: [{
+                            label: 'Total Quantity Used',
+                            data: usageQuantities, // Use actual dataValues if processed
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    };
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Material Usage Trend (Last 12 Months)',
+                            color: 'var(--text-primary)'
+                        },
+                        legend: {
+                            labels: {
+                                color: 'var(--text-primary)'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'var(--text-secondary)' },
+                            grid: { color: 'var(--border-color)' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'var(--text-secondary)' },
+                            grid: { color: 'var(--border-color)' }
+                        }
+                    }
+                }
+            };
+            initializeChart(materialUsageTrendChartConfig.chartId, materialUsageTrendChartConfig);
+
+
+            // KPI Update Logic (after data is loaded for the main table)
+            $.ajax({
+                url: "/api/Materials",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    updateMaterialKPIs(data);
+
+                    // Apply filters to DataTables
+                    const dataTable = dataTableManager[materialsTableId].dataTableInstance;
+
+                    $('#materialNameFilter, #materialCategoryFilter, #quantityMinFilter, #supplierFilter').on('change keyup', function () {
+                        const materialName = $('#materialNameFilter').val().toLowerCase();
+                        const materialCategory = $('#materialCategoryFilter').val();
+                        const quantityMin = parseFloat($('#quantityMinFilter').val());
+                        const supplier = $('#supplierFilter').val().toLowerCase();
+
+                        // Clear existing global search and column searches
+                        dataTable.search('').columns().search('');
+
+                        // Apply filters
+                        if (materialName) {
+                            dataTable.columns(1).search(materialName); // Material Name column
+                        }
+                        if (materialCategory) {
+                            dataTable.columns(2).search(materialCategory); // Material Category column
+                        }
+                        if (supplier) {
+                            dataTable.columns(6).search(supplier); // Supplier ID column
+                        }
+
+                        // Custom filter for Quantity On Hand (Min)
+                        $.fn.dataTable.ext.search.push(
+                            function (settings, searchData, index, rowData, counter) {
+                                if (settings.sTableId !== materialsTableId) {
+                                    return true; // Apply this filter only to the correct table
+                                }
+
+                                const quantity = parseFloat(rowData.quantityOnHand) || 0;
+                                if (isNaN(quantityMin) || quantity >= quantityMin) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        );
+                        dataTable.draw();
+                        $.fn.dataTable.ext.search.pop(); // Remove the custom filter after drawing
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data for KPIs:", status, error);
+                }
+            });
+
+            // Attach event listener to close button of the modal
+            document.getElementById('closeMaterialDetailsModalBtn').addEventListener('click', closeMaterialDetailsModal);
+        });
+    </script>
+}

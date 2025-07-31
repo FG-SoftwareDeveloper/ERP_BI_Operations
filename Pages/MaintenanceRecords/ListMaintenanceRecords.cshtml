@@ -1,0 +1,416 @@
+﻿@page
+@model MyApp.Namespace.ListMaintenanceRecordsModel
+@{
+    ViewData["Title"] = "Maintenance Records";
+}
+<div class="mx-auto p-4 sm:p-6 lg:p-8 glass-effect rounded-lg h-full overflow-y-auto">
+    <h2 class="text-4xl themed-heading font-extrabold mb-6 border-b-4 pb-2 inline-block">Maintenance Operations Dashboard</h2>
+
+    <!-- Maintenance Summary KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Total Records</h3>
+            <p class="text-4xl font-bold text-blue-600 mt-auto">450</p>
+            <span class="text-sm text-gray-500">All-time maintenance entries</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Open Work Orders</h3>
+            <p class="text-4xl font-bold text-orange-600 mt-auto">15</p>
+            <span class="text-sm text-gray-500">Pending or In Progress</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Completed Last Month</h3>
+            <p class="text-4xl font-bold text-green-600 mt-auto">68</p>
+            <span class="text-sm text-gray-500">Successfully closed tasks</span>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border flex flex-col justify-between shadow-md">
+            <h3 class="text-lg font-semibold text-primary mb-2">Avg. Cost Per Record</h3>
+            <p class="text-4xl font-bold text-purple-600 mt-auto">$185</p>
+            <span class="text-sm text-gray-500">Average expenditure per maintenance</span>
+        </div>
+    </div>
+
+    <!-- Filter and Action Buttons -->
+    <div class="mb-8 p-6 glass-effect rounded-xl border shadow-md">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Filter Maintenance Records</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div>
+                <label for="maintenanceStatusFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                <select id="maintenanceStatusFilter" class="form-select w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="">All Statuses</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div>
+                <label for="maintenanceEquipmentFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Equipment</label>
+                <input type="text" id="maintenanceEquipmentFilter" placeholder="Search by equipment ID..." class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="maintenanceTypeFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Maintenance Type</label>
+                <select id="maintenanceTypeFilter" class="form-select w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="">All Types</option>
+                    <option value="Preventive">Preventive</option>
+                    <option value="Corrective">Corrective</option>
+                    <option value="Predictive">Predictive</option>
+                    <option value="Breakdown">Breakdown</option>
+                </select>
+            </div>
+            <div>
+                <label for="maintenanceDateFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date Range</label>
+                <input type="month" id="maintenanceDateFilter" class="form-control w-full rounded-md shadow-sm border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center">
+            <a href="/MaintenanceRecords/Create" class="flex items-center px-6 py-3 btn-themed font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Create New Record
+            </a>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Schedule Maintenance
+            </button>
+            <button class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-yellow-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m2 8H7m6 1a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Generate Report
+            </button>
+            <button id="toggleViewBtn_maintenanceRecordsTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Switch to Card View
+            </button>
+            <button id="toggleChartBtn_maintenanceRecordsTable" class="flex items-center px-6 py-3 btn-themed-secondary font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
+                Show Chart
+            </button>
+        </div>
+    </div>
+
+    <!-- Maintenance Records Table -->
+    <div class="mb-8">
+        <h3 class="text-2xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">All Maintenance Records</h3>
+        <table id="maintenanceRecordsTable" class="display w-full text-left border-collapse rounded-lg shadow-md" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-xl">Maintenance ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Equipment ID</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Maintenance Date</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Description</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Cost</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Performed By</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Maintenance Type</th>
+                    <th class="px-4 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider rounded-tr-xl">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* DataTables will populate this tbody *@
+            </tbody>
+        </table>
+
+        <div id="maintenanceRecordsTable-card-view" class="mt-8 cards-grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;"></div>
+        <div id="maintenanceRecordsTable-chart-container" style="display: none;">
+            <canvas id="maintenanceRecordsTable-chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Maintenance Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Maintenance Status Distribution</h3>
+            <div style="height: 300px;"> 
+                <canvas id="maintenanceStatusChart"></canvas>
+            </div>
+        </div>
+        <div class="data-card glass-effect rounded-xl p-6 border shadow-md">
+            <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Maintenance Cost by Type</h3>
+            <div style="height: 300px;"> 
+                <canvas id="maintenanceCostByTypeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-card glass-effect rounded-xl p-6 border shadow-md mb-8">
+        <h3 class="text-xl font-bold themed-heading mb-4 border-b-2 pb-2 inline-block">Maintenance Trend (Last 12 Months)</h3>
+        <div style="height: 350px;"> 
+            <canvas id="maintenanceTrendChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+
+        
+        function LoadDataTable(config) {
+            const { tableId, ajaxUrl, columns, pageLength = 10, initialIsCardView = false, initialIsChartView = false, cardViewRender, chartConfig } = config;
+
+            // Initialize instance state
+            dataTableManager[tableId] = {
+                table: null,
+                data: [],
+                isCardView: initialIsCardView,
+                isChartView: initialIsChartView,
+                chartInstance: null,
+                chartConfig: chartConfig,
+                cardViewRender: cardViewRender,
+                columns: columns // Store columns for chart processing if needed
+            };
+
+            const instanceState = dataTableManager[tableId];
+
+            // Fetch data and initialize DataTable and chart
+            $.ajax({
+                url: ajaxUrl,
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    instanceState.data = data; // Store fetched data
+
+                    // Initialize DataTable
+                    instanceState.table = $(`#${tableId}`).DataTable({
+                        data: data,
+                        columns: columns,
+                        pageLength: pageLength,
+                        responsive: true,
+                        autoWidth: false,
+                        destroy: true, // Allow reinitialization
+                        dom: '<"flex flex-wrap justify-between items-center px-4 py-2"lf>rt<"flex flex-wrap justify-between items-center px-4 py-2"ip>',
+                        language: {
+                            search: "",
+                            searchPlaceholder: "Search...",
+                            lengthMenu: "Show _MENU_ entries",
+                            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                            infoEmpty: "Showing 0 to 0 of 0 entries",
+                            infoFiltered: "(filtered from _MAX_ total entries)",
+                            paginate: {
+                                first: "First",
+                                last: "Last",
+                                next: "Next",
+                                previous: "Previous"
+                            }
+                        },
+                        initComplete: function () {
+                            // Apply Tailwind classes to DataTables elements after initialization
+                            const wrapper = $(`#${tableId}_wrapper`);
+                            wrapper.find('.dataTables_length select').addClass('form-select rounded-lg border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50');
+                            wrapper.find('.dataTables_filter input').addClass('form-input rounded-lg border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50');
+                            wrapper.find('.dataTables_paginate .paginate_button').addClass('px-4 py-2 mx-1 rounded-md text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300');
+                            wrapper.find('.dataTables_paginate .paginate_button.current').addClass('bg-blue-600 text-white hover:bg-blue-700');
+                            wrapper.find('.dataTables_paginate .paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
+                            wrapper.find('.dataTables_info').addClass('text-sm text-gray-600');
+                        }
+                    });
+
+                    // Initial view setup
+                    if (initialIsCardView) {
+                        toggleTableView(tableId);
+                    }
+                    // Chart initialization only if chartConfig is provided and initialIsChartView is true
+                    if (chartConfig && initialIsChartView) {
+                        toggleChartView(tableId);
+                    }
+
+                    // Render initial card view if needed (even if not initially in card view, data is loaded for it)
+                    renderCardView(tableId);
+
+                    // Initialize Chart if chartConfig is provided (it will only render if chart view is active)
+                    if (chartConfig) {
+                        initializeChart(tableId);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(`Error fetching data for ${tableId}:`, status, error);
+                    // Optionally, display an error message to the user
+                    $(`#${tableId} tbody`).html(`<tr><td colspan="${columns.length}" class="text-center text-red-500 py-4">Error loading data. Please try again.</td></tr>`);
+                }
+            });
+        }
+
+        /**
+         * Renders the data in a card view.
+         * {string} tableId - The ID of the HTML table element.
+         */
+        function renderCardView(tableId) {
+            const instanceState = dataTableManager[tableId];
+            const cardViewContainer = $(`#${tableId}-card-view`);
+            cardViewContainer.empty(); // Clear previous cards
+
+            if (instanceState.data && instanceState.data.length > 0) {
+                instanceState.data.forEach(item => {
+                    cardViewContainer.append(instanceState.cardViewRender(item));
+                });
+            } else {
+                cardViewContainer.html('<p class="text-center text-gray-500">No data available to display in card view.</p>');
+            }
+        }
+
+        /**
+         * Toggles between table and card view for a given DataTable.
+         *  {string} tableId - The ID of the HTML table element.
+         */
+        function toggleTableView(tableId) {
+            const instanceState = dataTableManager[tableId];
+            const tableElement = $(`#${tableId}`);
+            const cardViewContainer = $(`#${tableId}-card-view`);
+            const chartContainer = $(`#${tableId}-chart-container`); // This might not exist for all tables
+
+            // Hide chart if it's currently visible and chart container exists
+            if (instanceState.isChartView && chartContainer.length) {
+                chartContainer.hide();
+                instanceState.isChartView = false;
+                // Update chart toggle button text if it exists
+                const chartToggleButton = $(`#toggleChartBtn_${tableId}`);
+                if (chartToggleButton.length) {
+                    chartToggleButton.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-7 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>Show Chart');
+                }
+            }
+
+            if (instanceState.isCardView) {
+                // Switch to Table View
+                tableElement.closest('.overflow-x-auto').show(); // Show the table container
+                cardViewContainer.hide();
+                instanceState.isCardView = false;
+            } else {
+                // Switch to Card View
+                renderCardView(tableId); // Re-render cards to ensure they are up-to-date
+                tableElement.closest('.overflow-x-auto').hide(); // Hide the table container
+                cardViewContainer.show();
+                instanceState.isCardView = true;
+            }
+        }
+
+        /**
+         * Initializes the Chart.js chart.
+         *  {string} tableId - The ID of the HTML table element.
+         */
+        function initializeChart(tableId) {
+            const instanceState = dataTableManager[tableId];
+            const chartCanvas = document.getElementById(`${tableId}-chart`);
+
+            // Only proceed if chartConfig is present and chartCanvas exists
+            if (!instanceState.chartConfig || !chartCanvas) {
+                console.warn(`Chart initialization skipped for ${tableId}: chartConfig or canvas not found.`);
+                return;
+            }
+
+            const ctx = chartCanvas.getContext('2d');
+
+            if (instanceState.chartInstance) {
+                instanceState.chartInstance.destroy(); // Destroy existing chart instance if any
+            }
+
+            const chartData = instanceState.chartConfig.processData(instanceState.data, instanceState.columns);
+
+            instanceState.chartInstance = new Chart(ctx, {
+                type: instanceState.chartConfig.type,
+                data: chartData,
+                options: instanceState.chartConfig.options
+            });
+        }
+
+        /**
+         * Toggles between table/card view and chart view.
+         *  {string} tableId - The ID of the HTML table element.
+         */
+        function toggleChartView(tableId) {
+            const instanceState = dataTableManager[tableId];
+            const tableContainer = $(`#${tableId}`).closest('.overflow-x-auto');
+            const cardViewContainer = $(`#${tableId}-card-view`);
+            const chartContainer = $(`#${tableId}-chart-container`);
+
+            // Only proceed if chartConfig is present and chartContainer exists
+            if (!instanceState.chartConfig || !chartContainer.length) {
+                console.warn(`Chart toggle skipped for ${tableId}: chartConfig or chart container not found.`);
+                return;
+            }
+
+            if (instanceState.isChartView) {
+                // Switch from Chart View to previous view (table or card)
+                chartContainer.hide();
+                if (instanceState.isCardView) {
+                    cardViewContainer.show();
+                } else {
+                    tableContainer.show();
+                }
+                instanceState.isChartView = false;
+            } else {
+                // Switch to Chart View
+                tableContainer.hide();
+                cardViewContainer.hide();
+                chartContainer.show();
+                instanceState.isChartView = true;
+                // Ensure chart is initialized and rendered when shown
+                initializeChart(tableId);
+            }
+        }
+
+        $(document).ready(function () {
+            const maintenanceRecordsTableId = "maintenanceRecordsTable";
+
+            LoadDataTable({
+                tableId: maintenanceRecordsTableId,
+                ajaxUrl: "/api/MaintenanceRecords", // Assuming an API endpoint for maintenance records
+                columns: [
+                    { data: "maintenanceId", title: "Maintenance ID" },
+                    { data: "equipmentId", title: "Equipment ID" },
+                    { data: "maintenanceDate", title: "Maintenance Date", render: function (data) { return data ? new Date(data).toLocaleDateString() : ""; } },
+                    { data: "description", title: "Description" },
+                    { data: "cost", title: "Cost", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "performedBy", title: "Performed By" },
+                    { data: "maintenanceType", title: "Maintenance Type" },
+                    {
+                        data: null,
+                        title: "Actions",
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            // Example action buttons - customize as needed
+                            return `
+                                <button class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+                                <button class="text-red-600 hover:text-red-900">Delete</button>
+                            `;
+                        }
+                    }
+                ],
+                pageLength: 10,
+                initialIsCardView: false,
+                initialIsChartView: false, // No chart for this page
+                cardViewRender: function (data) {
+                    return `
+                        <div class="data-card bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+                            <h3 class="text-xl font-bold text-blue-700 mb-2">Maintenance ID: ${data.maintenanceId}</h3>
+                            <div class="card-item"><strong>Equipment ID:</strong> <span>${data.equipmentId || 'N/A'}</span></div>
+                            <div class="card-item"><strong>Date:</strong> <span>${data.maintenanceDate ? new Date(data.maintenanceDate).toLocaleDateString() : 'N/A'}</span></div>
+                            <div class="card-item"><strong>Description:</strong> <span>${data.description || 'N/A'}</span></div>
+                            <div class="card-item"><strong>Cost:</strong> <span>${$.fn.dataTable.render.number(',', '.', 2, '$').display(data.cost)}</span></div>
+                            <div class="card-item"><strong>Performed By:</strong> <span>${data.performedBy || 'N/A'}</span></div>
+                            <div class="card-item"><strong>Type:</strong> <span>${data.maintenanceType || 'N/A'}</span></div>
+                            <div class="mt-4">
+                                <button class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 mr-2">Edit</button>
+                                <button class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                },
+                // No chartConfig provided as per request
+            });
+
+            // Table/Card toggle button
+            $(`#toggleViewBtn_${maintenanceRecordsTableId}`).on('click', function () {
+                toggleTableView(maintenanceRecordsTableId);
+                const $btn = $(this);
+                const instanceState = dataTableManager[maintenanceRecordsTableId];
+                if (instanceState.isCardView) {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>Switch to Table View');
+                } else {
+                    $btn.html('<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Switch to Card View');
+                }
+            });
+
+            // No Chart Toggle Button for Maintenance Records, so no click handler needed here.
+        });
+    </script>
+}

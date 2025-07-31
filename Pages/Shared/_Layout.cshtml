@@ -19,48 +19,174 @@
 
     <!-- Bootstrap 5 CSS (kept for general components like navbar, but removed table-specific styles) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- DataTables CSS (Core) - No Bootstrap integration CSS for DataTables, rely on custom Tailwind styling -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css" />
 
     <!-- Your custom CSS (for site-wide styles, overrides, or specific component styling) -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ERP_BI_Operations.styles.css" asp-append-version="true" />
 </head>
-<body class="bg-gray-100 text-gray-900">
-    <header class="bg-white shadow-md">
-        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <a class="navbar-brand text-xl font-bold text-blue-700" asp-area="" asp-page="/Index">ERP_BI_Operations</a>
-            <button class="navbar-toggler lg:hidden focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-2" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse lg:flex lg:items-center lg:w-auto w-full" id="navbarSupportedContent">
-                <ul class="navbar-nav flex-grow-1 lg:flex lg:space-x-4 mt-4 lg:mt-0">
-                    <li class="nav-item">
-                        <a class="nav-link text-gray-700 hover:text-blue-600 font-medium px-3 py-2 rounded-md transition-colors duration-200" asp-area="" asp-page="/Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-gray-700 hover:text-blue-600 font-medium px-3 py-2 rounded-md transition-colors duration-200" asp-area="" asp-page="/Privacy">Privacy</a>
-                    </li>
-                    @* Add more navigation links here for your ERP modules *@
-                    <li class="nav-item">
-                        <a class="nav-link text-gray-700 hover:text-blue-600 font-medium px-3 py-2 rounded-md transition-colors duration-200" asp-area="" asp-page="/Accounts/ListAccounts">Accounts</a>
-                    </li>
-                </ul>
-                <partial name="_LoginPartial" />
+<body class="dashboard-gradient">
+    @* Apply the background gradient here *@
+    <div class="d-flex dashboard-container" id="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar-full d-flex flex-column" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-3">
+                <img src="~/img/sidebar_logo.png" alt="HardRock Infrastructure LLC Logo" class="sidebar-logo" />
             </div>
-        </nav>
-    </header>
-    <div class="container mx-auto px-4 py-6">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <nav id="sidebarMenu" class="nav flex-column mt-2">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-speedometer me-2"></i> Dashboard
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dashboardDropdown">
+                        <li><a class="dropdown-item" asp-page="/Dashboards/Admin">Admin Dashboard</a></li>
+                        <li><a class="dropdown-item" asp-page="/Dashboards/Finance">Finance Dashboard</a></li>
+                        <li><a class="dropdown-item" asp-page="/Dashboards/HR">HR Dashboard</a></li>
+                        <li><a class="dropdown-item" asp-page="/Dashboards/Operations">Operations Dashboard</a></li>
+                        <li><a class="dropdown-item" asp-page="/Dashboards/Projects">Projects Dashboard</a></li>
+                    </ul>
+                </li>
+
+                <a asp-page="/Accounts/ListAccounts" class="nav-link">
+                    <i class="bi bi-cash-coin me-2"></i> Accounts
+                </a>
+                <a asp-page="/APInvoices/ListAPInvoice" class="nav-link">
+                    <i class="bi bi-file-earmark-spreadsheet me-2"></i> AP Invoices
+                </a>
+                <a asp-page="/ARInvoices/ListARInvoices" class="nav-link">
+                    <i class="bi bi-receipt me-2"></i> AR Invoices
+                </a>
+                <a asp-page="/BankAccounts/ListBankAccounts" class="nav-link">
+                    <i class="bi bi-bank me-2"></i> Bank Accounts
+                </a>
+                <a asp-page="/Companies/ListCompanies" class="nav-link">
+                    <i class="bi bi-building me-2"></i> Companies
+                </a>
+                <a asp-page="/Customers/ListCustomers" class="nav-link">
+                    <i class="bi bi-people me-2"></i> Customers
+                </a>
+                <a asp-page="/Departments/ListDepartments" class="nav-link">
+                    <i class="bi bi-diagram-3 me-2"></i> Departments
+                </a>
+                <a asp-page="/Documents/ListDocuments" class="nav-link">
+                    <i class="bi bi-folder me-2"></i> Documents
+                </a>
+                <a asp-page="/EmployeePayDetails/ListEmployeePay" class="nav-link">
+                    <i class="bi bi-wallet me-2"></i> Employee Pay
+                </a>
+                <a asp-page="/Employees/ListEmployees" class="nav-link">
+                    <i class="bi bi-person-badge me-2"></i> Employees
+                </a>
+                <a asp-page="/Equipment/ListEquipment" class="nav-link">
+                    <i class="bi bi-tools me-2"></i> Equipment
+                </a>
+                <a asp-page="/FinancialSnapshots/ListFinancialSnapshot" class="nav-link">
+                    <i class="bi bi-graph-up me-2"></i> Financial Snapshot
+                </a>
+                <a asp-page="/JournalEntries/ListJournalEntries" class="nav-link">
+                    <i class="bi bi-journal-text me-2"></i> Journal
+                </a>
+                <a asp-page="/MaintenanceRecords/ListMaintenanceRecords" class="nav-link">
+                    <i class="bi bi-wrench me-2"></i> Maintenance Records
+                </a>
+                <a asp-page="/Materials/ListMaterials" class="nav-link">
+                    <i class="bi bi-box-seam me-2"></i> Materials
+                </a>
+                <a asp-page="/MaterialUsage/ListMaterialUsage" class="nav-link">
+                    <i class="bi bi-truck me-2"></i> Material Usage
+                </a>
+                <a asp-page="/Payments/ListPayments" class="nav-link">
+                    <i class="bi bi-credit-card me-2"></i> Payments
+                </a>
+                <a asp-page="/PayrollRuns/ListPayrollRuns" class="nav-link">
+                    <i class="bi bi-calculator me-2"></i> Payroll Runs
+                </a>
+                <a asp-page="/ProjectFinancialSummary/ListProjectFinancialSummary" class="nav-link">
+                    <i class="bi bi-pie-chart me-2"></i> Project Financial Summary
+                </a>
+                <a asp-page="/Projects/ListProjects" class="nav-link">
+                    <i class="bi bi-kanban me-2"></i> Projects
+                </a>
+                <a asp-page="/PurchaseOrderLines/ListPurchaseOrderLines" class="nav-link">
+                    <i class="bi bi-list-ol me-2"></i> Purchase Order Lines
+                </a>
+                <a asp-page="/PurchaseOrders/ListPurchaseOrders" class="nav-link">
+                    <i class="bi bi-cart-check me-2"></i> Purchase Orders
+                </a>
+                <a asp-page="/Receipts/ListReceipts" class="nav-link">
+                    <i class="bi bi-clipboard-check me-2"></i> Receipts
+                </a>
+                <a asp-page="/RFIs/ListRFIs" class="nav-link">
+                    <i class="bi bi-question-circle me-2"></i> RFIs
+                </a>
+                <a asp-page="/Roles/ListRoles" class="nav-link">
+                    <i class="bi bi-person-fill-gear me-2"></i> Roles
+                </a>
+                <a asp-page="/ServiceAgreements/ListServiceAgreements" class="nav-link">
+                    <i class="bi bi-handshake me-2"></i> Service Agreements
+                </a>
+                <a asp-page="/ServiceOrders/ListServiceOrders" class="nav-link">
+                    <i class="bi bi-clipboard-data me-2"></i> Service Orders
+                </a>
+            </nav>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content Wrapper -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">ERP BI Operations</a>
+                    <div class="position-absolute top-0 end-0 mt-2 me-2">
+                        <label class="theme-switch">
+                            <input type="checkbox" id="themeToggle">
+                            <span class="slider">
+                                <i class="bi bi-sun-fill"></i>
+                                <i class="bi bi-moon-fill"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" id="combinedNavbarSidebarToggle">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" asp-page="/Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Pricing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav">
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid py-4">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
     </div>
 
-    <footer class="border-t border-gray-200 bg-white text-gray-600 py-4 mt-8 shadow-inner">
-        <div class="container mx-auto px-4 text-center">
-            &copy; 2025 - ERP_BI_Operations - <a asp-area="" asp-page="/Privacy" class="text-blue-600 hover:underline">Privacy</a>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - ERP_BI_Operations - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -71,11 +197,195 @@
 
     <!-- DataTables JS (Core) -->
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Your custom site.js -->
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Theme Toggle Logic
+            const themeToggle = $('#themeToggle');
+            const htmlElement = $('html'); // Target the html element for data-theme
+
+            // Function to set the theme
+            function setTheme(theme) {
+                htmlElement.attr('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                // Update the checkbox state
+                themeToggle.prop('checked', theme === 'dark');
+            }
+
+            // Load theme from localStorage on page load
+            const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light
+            setTheme(savedTheme);
+
+            // Listen for theme toggle changes
+            themeToggle.on('change', function() {
+                if ($(this).is(':checked')) {
+                    setTheme('dark');
+                } else {
+                    setTheme('light');
+                }
+            });
+
+            // Combined Toggle functionality for Navbar and Sidebar
+            $("#combinedNavbarSidebarToggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+
+            // Function to set active class on sidebar link
+            function setActiveLink(path) {
+                $('#sidebarMenu .nav-link').removeClass('active');
+                $('#sidebarMenu a.nav-link').each(function() {
+                    const linkUrl = $(this).data('page-url');
+                    if (linkUrl && (path === linkUrl || (path.startsWith(linkUrl) && linkUrl !== "/"))) {
+                        $(this).addClass('active');
+                    } else if (linkUrl === "/Index" && path === "/") {
+                        $(this).addClass('active');
+                    }
+                });
+            }
+
+            // Initial active link setting
+            setActiveLink(window.location.pathname);
+
+            // AJAX page loading logic
+            async function loadPageContent(url, pushState = true) {
+                try {
+                    const response = await fetch(url);
+                    const html = await response.text();
+
+                    // Create a temporary div to parse the fetched HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+
+                    // Extract the content of the <main> tag
+                    const newMainContent = tempDiv.querySelector('main[role="main"]');
+
+                    if (newMainContent) {
+                        // Replace the current main content
+                        $('#main-content-area').html(newMainContent.innerHTML);
+
+                        // Update the browser URL without reloading
+                        if (pushState) {
+                            history.pushState({ path: url }, '', url);
+                        }
+
+                        // Update active sidebar link
+                        setActiveLink(url);
+
+                        // Scroll to top of the content area, not the entire page
+                        $('#main-content-area').scrollTop(0);
+
+                        // Re-initialize DataTables and Charts for the new content
+                        // This function will be defined in site.js
+                        if (typeof initializeCurrentPageFeatures === 'function') {
+                            initializeCurrentPageFeatures();
+                        }
+                    } else {
+                        console.error('Could not find <main> content in fetched HTML for:', url);
+                    }
+                } catch (error) {
+                    console.error('Error loading page content:', error);
+                    // Optionally, redirect to the full page on error
+                    window.location.href = url;
+                }
+            }
+
+            // Handle sidebar link clicks
+            $(document).on('click', '.sidebar-ajax-link', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const url = $(this).data('page-url');
+                if (url) {
+                    loadPageContent(url);
+                }
+            });
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', (event) => {
+                if (event.state && event.state.path) {
+                    loadPageContent(event.state.path, false); // Don't push state again
+                } else {
+                    // Fallback for initial page load or if state is null
+                    loadPageContent(window.location.pathname, false);
+                }
+            });
+
+            // Initial load of page features (for the page loaded on first visit)
+            // This will ensure DataTables and Charts on the initial page are set up.
+            if (typeof initializeCurrentPageFeatures === 'function') {
+                initializeCurrentPageFeatures();
+            }
+
+                    /**Home Page*/
+       
+            // Simple animation for KPI numbers (optional, but adds a nice touch)
+            function animateValue(id, start, end, duration, prefix = '', suffix = '') {
+                let current = start;
+                const range = end - start;
+                const increment = end > start ? 1 : -1;
+                const stepTime = Math.abs(Math.floor(duration / range));
+                const obj = document.getElementById(id);
+
+                if (!obj) return; // Exit if element not found
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if ((increment > 0 && current > end) || (increment < 0 && current < end)) {
+                        current = end;
+                    }
+                    if (id === 'kpiRevenue' || id === 'kpiTotalInventoryValue') { // Assuming these are currency
+                        obj.textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(current);
+                    } else if (id === 'kpiProfitMargin') {
+                        obj.textContent = current.toFixed(1) + '%';
+                    } else {
+                        obj.textContent = prefix + current.toLocaleString() + suffix;
+                    }
+
+                    if (current === end) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
+
+            // Trigger animations for KPIs on page load
+            // Using dummy values for now. In a real app, these would come from your backend.
+            animateValue('kpiRevenue', 0, 1234567, 2000);
+            animateValue('kpiProfitMargin', 0, 28.5, 1500);
+            animateValue('kpiActiveUsers', 0, 1500, 1800, '', '+');
+
+            // Add a subtle bounce animation to the hero button after a delay
+            setTimeout(() => {
+                $('.animate-bounce-once').removeClass('animate-bounce-once').addClass('animate-pulse-subtle');
+            }, 2500); // Remove bounce and add subtle pulse after 2.5 seconds
+
+            // Simple intersection observer for fade-in effect on sections
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        $(entry.target).addClass('fade-in-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            $('.module-card, .data-card, .dashboard-link-card').each(function () {
+                observer.observe(this);
+            });
+
+        });
+        
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -1,0 +1,56 @@
+﻿@page
+@model MyApp.Namespace.ListReceiptsModel
+@{
+    ViewData["Title"] = "Receipts";
+}
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-lg shadow-inner">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2 inline-block">Receipts Overview</h2>
+
+    <div class="mb-6 flex flex-wrap gap-4 items-center">
+        <button id="toggleViewBtn_receiptsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Switch to Card View
+        </button>
+        <button id="toggleChartBtn_receiptsTable" class="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-800 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-green-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm12 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10zm-7 0a2 2 0 01-2 2h-2a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2v10z"></path></svg>
+            Show Chart
+        </button>
+    </div>
+
+    <!-- Receipts Table -->
+    <table id="receiptsTable" class="display w-full text-left border-collapse rounded-lg shadow-md" style="width:100%">
+        <thead class="bg-blue-100 text-blue-800">
+            <tr>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider rounded-tl-lg">Receipt ID</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider">PO ID</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider">Receipt Date</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider">Received By</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider">Quantity Received</th>
+                <th class="p-3 border-b-2 border-blue-200 text-sm font-semibold uppercase tracking-wider rounded-tr-lg">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- DataTables will populate this tbody -->
+        </tbody>
+    </table>
+
+    <!-- Card View Container (initially hidden, populated by JS) -->
+    <div id="receiptsTable-card-view" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;">
+        <!-- Cards will be rendered here by JavaScript -->
+    </div>
+
+    <!-- Chart Container (initially hidden) -->
+    <div id="receiptsTable-chart-container" class="mt-8" style="display: none;">
+        <canvas id="receiptsTable-chart"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // All DataTable initialization and toggle logic is now handled in site.js.
+            // No page-specific JS functions needed here.
+        });
+    </script>
+}
