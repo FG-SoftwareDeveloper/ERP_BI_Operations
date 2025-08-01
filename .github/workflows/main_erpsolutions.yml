@@ -1,5 +1,5 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Docs: https://github.com/Azure/webapps-deploy
+# Purpose: Build and deploy ASP.NET Core app to Azure Web App - ERPSolutions
 
 name: Build and deploy ASP.Net Core app to Azure Web App - ERPSolutions
 
@@ -13,29 +13,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read  # required for actions/checkout
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up .NET
+      - name: 🧰 Set up .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build with dotnet
+      - name: 🛠️ Build the project
         run: dotnet build --configuration Release
 
-      - name: Publish app
+      - name: 🚀 Publish the project
         run: dotnet publish -c Release -o published
 
-      - name: Upload artifact
+      - name: 📦 Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
-          name: published-app
+          name: .net-app
           path: published
 
   deploy:
@@ -43,16 +41,15 @@ jobs:
     needs: build
 
     steps:
-      - name: Download artifact
+      - name: 📥 Download published artifact
         uses: actions/download-artifact@v4
         with:
-          name: published-app
-          path: published
+          name: .net-app
 
-      - name: Deploy to Azure Web App
+      - name: 🚀 Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'ERPSolutions'
+          app-name: 'ERPSolutions' # Your Web App name in Azure
           slot-name: 'Production'
-          package: published
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4FB01B1515746BF8C1B935EF7C8F0FE }}
+          package: .
